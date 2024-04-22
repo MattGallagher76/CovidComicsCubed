@@ -2582,7 +2582,10 @@ PrefabInstance:
       objectReference: {fileID: 1891633177}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8174458650848854750, guid: 166791eb929fbf448b35f7ab42675c88, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3328863025065062892}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 166791eb929fbf448b35f7ab42675c88, type: 3}
 --- !u!1001 &3292438304191049969
@@ -2662,6 +2665,68 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4666837468686266005, guid: 77ef9c3d252323345b1b3ac82a97ebc9, type: 3}
   m_PrefabInstance: {fileID: 3292438304191049969}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3328863025065062891
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2006500395}
+    m_Modifications:
+    - target: {fileID: 1528378849815332070, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_Name
+      value: IPhone_with_animation
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+--- !u!4 &3328863025065062892 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2197251786690453084, guid: 2a9103a987e5c9e409a1a4466418b012, type: 3}
+  m_PrefabInstance: {fileID: 3328863025065062891}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
