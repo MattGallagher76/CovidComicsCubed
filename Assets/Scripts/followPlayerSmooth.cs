@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class followPlayerSmooth : MonoBehaviour
 {
-    public Transform target;           // Target to follow (player). Set this in the inspector.
+    public Transform playerTarget;           // Target to follow (player). Set this in the inspector.
+    public Transform centerRoom;
     public float smoothSpeed; // Adjust the smoothing speed. Increase for faster following.
     public float maxSpeed;
     public float speedModifier;
@@ -15,15 +16,26 @@ public class followPlayerSmooth : MonoBehaviour
     public float rotSpeedModifier;
     public float rotMin;
 
+    private bool isInRoom = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //centerRoom.localPosition = new Vector3(centerRoom.localPosition.x, playerTarget.localPosition.y, centerRoom.localPosition.z);
     }
 
     // Update is called once per frame
     void Update()
     {
+        Transform target;
+        if(isInRoom)
+        {
+            target = playerTarget;
+        }
+        else
+        {
+            target = centerRoom;
+        }
         Vector3 rotDist = new Vector3(
             Mathf.DeltaAngle(transform.eulerAngles.x, target.eulerAngles.x),
             Mathf.DeltaAngle(transform.eulerAngles.y, target.eulerAngles.y),
@@ -32,17 +44,21 @@ public class followPlayerSmooth : MonoBehaviour
 
         if (rotDist.magnitude > rotMaxSpeed)
         {
+            Debug.Log("Over max: " + rotDist.magnitude);
             rotDist = rotDist.normalized * rotMaxSpeed;
+            Debug.Log("New rotDist: " + rotDist);
         }
-
         if (rotDist.magnitude < rotMin)
         {
+            Debug.Log("Under Min: " + rotDist.magnitude);
             transform.eulerAngles = target.eulerAngles;
+            Debug.Log("New rotDist: " + rotDist);
         }
         else
         {
             transform.eulerAngles += rotDist * rotSpeedModifier;
         }
+        Debug.Log("Step");
         Vector3 dist = target.position - transform.position;
         if(dist.magnitude > maxSpeed)
         {
@@ -56,5 +72,10 @@ public class followPlayerSmooth : MonoBehaviour
         {
             transform.position += dist * speedModifier;
         }
+    }
+
+    public void setIsInRoom(bool t)
+    {
+        isInRoom = t;
     }
 }

@@ -52,8 +52,10 @@ public class SwipeCheck : MonoBehaviour
                 startPos = collidedObject.transform.position;
                 hasStartedSwiping = true;
                 currentPage = Instantiate(pagePrefab);
+                Vector3 tempScale = currentPage.transform.localScale;
                 currentPage.transform.position = center.transform.position;
                 currentPage.transform.parent = transform;
+                currentPage.transform.localScale = tempScale;
             }
             float mag = (startPos - collidedObject.transform.position).magnitude;
             Vector3 movePage = (pageOutput.transform.position - center.transform.position).normalized;

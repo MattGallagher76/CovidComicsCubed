@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class isPhoneFollowing : MonoBehaviour
 {
+    public followPlayerSmooth fps;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,11 +19,17 @@ public class isPhoneFollowing : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.tag.Equals("MainCamera"))
+        {
+            fps.setIsInRoom(true);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        
+        if (other.tag.Equals("MainCamera"))
+        {
+            fps.setIsInRoom(false);
+        }
     }
 }
