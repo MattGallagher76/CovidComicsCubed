@@ -812,15 +812,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCount: 48
-  rMin: 15
-  rMax: 15.2
+  rMin: 30
+  rMax: 30.2
   theta: 250
   phiMin: 70
-  phiMax: 130
+  phiMax: 150
   pagePrefab: {fileID: 5781245765960050843, guid: 39b00fde6f19d2e4aac03136b8914289, type: 3}
   emptyPrefab: {fileID: 564616044403225686, guid: d631d4d7290c39e49a7fe70c723bdd64, type: 3}
   isRandom: 1
-  setOrientation: 2
+  setOrientation: 0
   orientationDivider: 2
 --- !u!1001 &687867364
 PrefabInstance:
