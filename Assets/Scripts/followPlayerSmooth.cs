@@ -44,21 +44,22 @@ public class followPlayerSmooth : MonoBehaviour
 
         if (rotDist.magnitude > rotMaxSpeed)
         {
-            Debug.Log("Over max: " + rotDist.magnitude);
+            //Debug.Log("Over max: " + rotDist.magnitude);
             rotDist = rotDist.normalized * rotMaxSpeed;
-            Debug.Log("New rotDist: " + rotDist);
+            //Debug.Log("New rotDist: " + rotDist);
         }
         if (rotDist.magnitude < rotMin)
         {
-            Debug.Log("Under Min: " + rotDist.magnitude);
+            //Debug.Log("Under Min: " + rotDist.magnitude);
             transform.eulerAngles = target.eulerAngles;
-            Debug.Log("New rotDist: " + rotDist);
+            //Debug.Log("New rotDist: " + rotDist);
         }
         else
         {
             transform.eulerAngles += rotDist * rotSpeedModifier;
         }
-        Debug.Log("Step");
+
+        //Debug.Log("Step");
         Vector3 dist = target.position - transform.position;
         if(dist.magnitude > maxSpeed)
         {

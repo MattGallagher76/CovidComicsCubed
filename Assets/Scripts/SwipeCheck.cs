@@ -1,4 +1,5 @@
 using Oculus.Interaction;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,12 +20,18 @@ public class SwipeCheck : MonoBehaviour
     public float displayBoardWidth;
     public float displayBoardHeight;
 
+    public float magnitudeMultiplier;
+    public float pageMinimum;
+
     private bool isInPose = false;
     private bool isInCollider = false;
     private bool hasStartedSwiping = false;
     private Vector3 startPos;
     private GameObject currentPage;
-    
+
+    public NewPageGenerator pg;
+
+    private bool isPageSuccessful = false;
 
     // Start is called before the first frame update
     void Start()
@@ -36,49 +43,67 @@ public class SwipeCheck : MonoBehaviour
 
     public void Update()
     {
-        bool byPass = false;
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            byPass = true;
+            Debug.Log("Space Pressed");
+            isInPose = true;
         }
-        if((isInCollider && isInPose) || byPass)
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            if(!hasStartedSwiping || byPass)
-            {
-                //Creates a new page
-                GameObject temp = Instantiate(debugPrefab);
-                temp.transform.position = collidedObject.transform.position;
+            Debug.Log("C Pressed");
+            isInPose = false;
+        }
 
+
+
+        if ((isInCollider && isInPose))
+        {
+            if(!hasStartedSwiping)
+            {
+                Debug.Log("Hih");
                 startPos = collidedObject.transform.position;
                 hasStartedSwiping = true;
                 currentPage = Instantiate(pagePrefab);
                 Vector3 tempScale = currentPage.transform.localScale;
-                currentPage.transform.position = center.transform.position;
-                currentPage.transform.parent = transform;
+                Vector3 tempPosition = currentPage.transform.localPosition;
+                currentPage.transform.parent = center.transform;
                 currentPage.transform.localScale = tempScale;
+                currentPage.transform.localPosition = Vector3.zero;
+                currentPage.transform.localEulerAngles = Vector3.zero;
             }
-            float mag = (startPos - collidedObject.transform.position).magnitude;
-            Vector3 movePage = (pageOutput.transform.position - center.transform.position).normalized;
-            currentPage.transform.position = movePage * mag;
+            if(!isPageSuccessful)
+            {
+                float mag = (startPos.y - collidedObject.transform.position.y);
+                Debug.Log(mag);
+                currentPage.transform.localPosition = new Vector3(
+                    currentPage.transform.localPosition.x,
+                    -mag * magnitudeMultiplier,
+                    currentPage.transform.localPosition.z);
+            }
         }
         else
         {
             if(hasStartedSwiping)
             {
-                float mag = (startPos - collidedObject.transform.position).magnitude;
-                if(mag > 1) //TODO
-                {
-                    //Page is complete
-                }
-                else
-                {
-                    //Page should be stopped
-                    Destroy(currentPage);
-                    currentPage = null;
-                    hasStartedSwiping = false;
-                }
+                Destroy(center.transform.GetChild(0));
+                pg.makePage();
             }
-            //Swipe is not running or has stopped
+        }
+        if(hasStartedSwiping)
+        {
+            float mag = (startPos.y - collidedObject.transform.position.y);
+            Debug.Log("Check: " + -mag + " vs " + pageMinimum);
+            if (-mag > pageMinimum) //TODO
+            {
+                isPageSuccessful = true;
+            }
+            else
+            {
+                //Page should be stopped
+                Destroy(currentPage);
+                currentPage = null;
+                hasStartedSwiping = false;
+            }
         }
     }
 
@@ -101,5 +126,17 @@ public class SwipeCheck : MonoBehaviour
     public void exitCollider()
     {
         isInCollider = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag.Equals("hand"))
+            enterCollider(other.gameObject);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag.Equals("hand"))
+            exitCollider();
     }
 }

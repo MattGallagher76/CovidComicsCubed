@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class PageGenerator : MonoBehaviour
+public class NewPageGenerator : MonoBehaviour
 {
     public int pageCount;
     public float rMin;
@@ -59,7 +58,7 @@ public class PageGenerator : MonoBehaviour
     {
         if (!isPages)
         {
-            if(isRandom)
+            if (isRandom)
             {
                 for (int i = 0; i < pageCount; i++)
                 {
@@ -116,12 +115,12 @@ public class PageGenerator : MonoBehaviour
                 p.transform.localEulerAngles = Vector3.zero;
                 p.transform.localPosition = Vector3.one;
                 Debug.Log(p.transform.position);
-                if(setOrientation == 0)
+                if (setOrientation == 0)
                     p.transform.LookAt(transform);
-                else if(setOrientation == 1)
+                else if (setOrientation == 1)
                 {
                     p.transform.LookAt(transform);
-                    p.transform.localEulerAngles = new Vector3(0, p.transform.localEulerAngles.y, 0); 
+                    p.transform.localEulerAngles = new Vector3(0, p.transform.localEulerAngles.y, 0);
                 }
             }
         }
