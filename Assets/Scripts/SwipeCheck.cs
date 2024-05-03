@@ -67,42 +67,24 @@ public class SwipeCheck : MonoBehaviour
                 Vector3 tempScale = currentPage.transform.localScale;
                 Vector3 tempPosition = currentPage.transform.localPosition;
                 currentPage.transform.parent = center.transform;
-                currentPage.transform.localScale = tempScale;
+                currentPage.transform.localScale = tempScale * 2;
                 currentPage.transform.localPosition = Vector3.zero;
                 currentPage.transform.localEulerAngles = Vector3.zero;
             }
-            if(!isPageSuccessful)
-            {
-                float mag = (startPos.y - collidedObject.transform.position.y);
-                Debug.Log(mag);
-                currentPage.transform.localPosition = new Vector3(
-                    currentPage.transform.localPosition.x,
-                    -mag * magnitudeMultiplier,
-                    currentPage.transform.localPosition.z);
-            }
-        }
-        else
-        {
-            if(hasStartedSwiping)
-            {
-                Destroy(center.transform.GetChild(0));
-                pg.makePage();
-            }
+            //While still swiping, move page with finger
+            float mag = (startPos.y - collidedObject.transform.position.y);
+            currentPage.transform.localPosition = new Vector3(
+                currentPage.transform.localPosition.x,
+                -mag * magnitudeMultiplier,
+                currentPage.transform.localPosition.z);
         }
         if(hasStartedSwiping)
         {
             float mag = (startPos.y - collidedObject.transform.position.y);
-            Debug.Log("Check: " + -mag + " vs " + pageMinimum);
+            //Debug.Log(-mag);
             if (-mag > pageMinimum) //TODO
             {
                 isPageSuccessful = true;
-            }
-            else
-            {
-                //Page should be stopped
-                Destroy(currentPage);
-                currentPage = null;
-                hasStartedSwiping = false;
             }
         }
     }
@@ -119,13 +101,24 @@ public class SwipeCheck : MonoBehaviour
 
     public void enterCollider(GameObject go)
     {
+        Debug.Log("An object has entered the collider");
         isInCollider = true;
         collidedObject = go;
     }
 
     public void exitCollider()
     {
+        Debug.Log("An object has exited the collider");
         isInCollider = false;
+
+        if (hasStartedSwiping && isPageSuccessful)
+        {
+            hasStartedSwiping = false;
+            isPageSuccessful = false;
+            Debug.Log("Make page");
+            pg.makePage();
+        }
+        Destroy(currentPage);
     }
 
     private void OnTriggerEnter(Collider other)
