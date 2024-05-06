@@ -48,7 +48,7 @@ public class FollowPlayerNatural : MonoBehaviour
             0, Mathf.DeltaAngle(transform.eulerAngles.y, target.eulerAngles.y), 0);
         Vector3 locDist = target.position - transform.position;
 
-        Debug.Log(rotDist.magnitude);
+        //Debug.Log(rotDist.magnitude);
 
         if (rotDist.magnitude > minimumRotationDifference)
         {

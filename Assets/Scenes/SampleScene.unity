@@ -1455,6 +1455,21 @@ MonoBehaviour:
   maximumRotationSpeed: 1
   rotationSpeedMultiplier: 1
   minimumRotationThreshold: 0.01
+  targetY: 0
+  minimumForwardThresholdX: 0
+  minimumBackwardThresholdX: 0
+  minimumForwardThresholdZ: 0
+  minimumBackwardThresholdZ: 0
+  maximumThresholdX: 0
+  maximumThresholdZ: 0
+  maximumPositionSpeed: 0
+  positionSpeedMultiplier: 0
+  zCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1278716834
 GameObject:
   m_ObjectHideFlags: 0
