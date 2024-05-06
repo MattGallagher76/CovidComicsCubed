@@ -6,12 +6,10 @@ public class followPlayerSmooth : MonoBehaviour
 {
     public Transform playerTarget;           // Target to follow (player). Set this in the inspector.
     public Transform centerRoom;
-    public float smoothSpeed; // Adjust the smoothing speed. Increase for faster following.
     public float maxSpeed;
     public float speedModifier;
     public float min;
 
-    public float rotSmoothSpeed; // Adjust the smoothing speed. Increase for faster following.
     public float rotMaxSpeed;
     public float rotSpeedModifier;
     public float rotMin;
@@ -44,15 +42,11 @@ public class followPlayerSmooth : MonoBehaviour
 
         if (rotDist.magnitude > rotMaxSpeed)
         {
-            //Debug.Log("Over max: " + rotDist.magnitude);
             rotDist = rotDist.normalized * rotMaxSpeed;
-            //Debug.Log("New rotDist: " + rotDist);
         }
         if (rotDist.magnitude < rotMin)
         {
-            //Debug.Log("Under Min: " + rotDist.magnitude);
             transform.eulerAngles = target.eulerAngles;
-            //Debug.Log("New rotDist: " + rotDist);
         }
         else
         {

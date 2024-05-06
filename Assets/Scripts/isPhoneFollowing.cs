@@ -5,6 +5,7 @@ using UnityEngine;
 public class isPhoneFollowing : MonoBehaviour
 {
     public followPlayerSmooth fps;
+    public FollowPlayerNatural fpn;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,7 @@ public class isPhoneFollowing : MonoBehaviour
         if (other.tag.Equals("MainCamera"))
         {
             fps.setIsInRoom(true);
+            fpn.setIsInRoom(true);
         }
     }
 
@@ -30,6 +32,7 @@ public class isPhoneFollowing : MonoBehaviour
         if (other.tag.Equals("MainCamera"))
         {
             fps.setIsInRoom(false);
+            fpn.setIsInRoom(false);
         }
     }
 }
