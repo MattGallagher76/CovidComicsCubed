@@ -8,6 +8,7 @@ public class SwipeCheck : MonoBehaviour
 {
     public ActiveStateSelector[] swipePose;
     public GameObject pagePrefab;
+    public GameObject pageCurvePrefab;
     public GameObject debugPrefab;
 
     private GameObject collidedObject;
@@ -20,7 +21,6 @@ public class SwipeCheck : MonoBehaviour
     public float displayBoardWidth;
     public float displayBoardHeight;
 
-    public float magnitudeMultiplier;
     public float pageMinimum;
 
     private bool isInPose = false;
@@ -32,6 +32,10 @@ public class SwipeCheck : MonoBehaviour
     public NewPageGenerator pg;
 
     private bool isPageSuccessful = false;
+
+    public float scaleConstant;
+    public float magnitudeConstant;
+    public bool useNewPage;
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +71,7 @@ public class SwipeCheck : MonoBehaviour
                 Vector3 tempScale = currentPage.transform.localScale;
                 Vector3 tempPosition = currentPage.transform.localPosition;
                 currentPage.transform.parent = center.transform;
-                currentPage.transform.localScale = tempScale * 2;
+                currentPage.transform.localScale = tempScale * scaleConstant;
                 currentPage.transform.localPosition = Vector3.zero;
                 currentPage.transform.localEulerAngles = Vector3.zero;
             }
@@ -75,7 +79,7 @@ public class SwipeCheck : MonoBehaviour
             float mag = (startPos.y - collidedObject.transform.position.y);
             currentPage.transform.localPosition = new Vector3(
                 currentPage.transform.localPosition.x,
-                -mag * magnitudeMultiplier,
+                -mag * magnitudeConstant,
                 currentPage.transform.localPosition.z);
         }
         if(hasStartedSwiping)
@@ -113,11 +117,11 @@ public class SwipeCheck : MonoBehaviour
 
         if (hasStartedSwiping && isPageSuccessful)
         {
-            hasStartedSwiping = false;
             isPageSuccessful = false;
             Debug.Log("Make page");
             pg.makePage();
         }
+        hasStartedSwiping = false;
         Destroy(currentPage);
     }
 

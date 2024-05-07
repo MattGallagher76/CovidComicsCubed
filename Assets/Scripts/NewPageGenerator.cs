@@ -14,6 +14,7 @@ public class NewPageGenerator : MonoBehaviour
 
     public GameObject pagePrefab;
     public GameObject emptyPrefab;
+    public Transform focusPoint;
 
     public Boolean isRandom;
 
@@ -68,7 +69,7 @@ public class NewPageGenerator : MonoBehaviour
                     GameObject temp = Instantiate(emptyPrefab);
                     temp.transform.parent = transform;
                     temp.transform.localPosition = new Vector3(r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos(th * Mathf.Deg2Rad),
-                        r * Mathf.Cos(phi * Mathf.Deg2Rad),
+                        r * Mathf.Cos(phi/2 * Mathf.Deg2Rad) * 2,
                         r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin(th * Mathf.Deg2Rad));
                     temp.transform.localScale = Vector3.one;
                     badEmp.Add(temp);
@@ -90,7 +91,7 @@ public class NewPageGenerator : MonoBehaviour
                             GameObject temp = Instantiate(emptyPrefab);
                             temp.transform.parent = transform;
                             temp.transform.localPosition = new Vector3(r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos(th * Mathf.Deg2Rad),
-                                r * Mathf.Cos(phi * Mathf.Deg2Rad),
+                                r * Mathf.Cos(phi/2 * Mathf.Deg2Rad) * 2,
                                 r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin(th * Mathf.Deg2Rad));
                             temp.transform.localScale = Vector3.one;
                             badEmp.Add(temp);
@@ -116,7 +117,7 @@ public class NewPageGenerator : MonoBehaviour
                 p.transform.localPosition = Vector3.one;
                 Debug.Log(p.transform.position);
                 if (setOrientation == 0)
-                    p.transform.LookAt(transform);
+                    p.transform.LookAt(focusPoint);
                 else if (setOrientation == 1)
                 {
                     p.transform.LookAt(transform);
@@ -143,8 +144,9 @@ public class NewPageGenerator : MonoBehaviour
         Vector3 scale = newPage.transform.localScale;
         newPage.transform.parent = temp.transform;
         newPage.transform.localScale = scale;
-        newPage.transform.localEulerAngles = Vector3.zero;
         newPage.transform.localPosition = Vector3.one;
+        if (setOrientation == 0)
+            newPage.transform.LookAt(focusPoint);
     }
 
     private void deletePages()

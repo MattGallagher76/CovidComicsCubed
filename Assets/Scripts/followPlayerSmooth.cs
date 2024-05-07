@@ -34,10 +34,16 @@ public class followPlayerSmooth : MonoBehaviour
         {
             target = centerRoom;
         }
-        Vector3 rotDist = new Vector3(
+        /*Vector3 rotDist = new Vector3(
             Mathf.DeltaAngle(transform.eulerAngles.x, target.eulerAngles.x),
             Mathf.DeltaAngle(transform.eulerAngles.y, target.eulerAngles.y),
             Mathf.DeltaAngle(transform.eulerAngles.z, target.eulerAngles.z)
+        );*/
+
+        Vector3 rotDist = new Vector3(
+            0,
+            Mathf.DeltaAngle(transform.eulerAngles.y, target.eulerAngles.y),
+            0
         );
 
         if (rotDist.magnitude > rotMaxSpeed)
