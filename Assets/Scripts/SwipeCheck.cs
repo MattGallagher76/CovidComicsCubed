@@ -68,6 +68,7 @@ public class SwipeCheck : MonoBehaviour
                 startPos = collidedObject.transform.position;
                 hasStartedSwiping = true;
                 currentPage = Instantiate(pagePrefab);
+                currentPage.GetComponent<pageBobble>().disableBobble();
                 Vector3 tempScale = currentPage.transform.localScale;
                 Vector3 tempPosition = currentPage.transform.localPosition;
                 currentPage.transform.parent = center.transform;
@@ -86,6 +87,7 @@ public class SwipeCheck : MonoBehaviour
         {
             float mag = (startPos.y - collidedObject.transform.position.y);
             //Debug.Log(-mag);
+            Debug.Log("Mag: " + -mag + ", Min: " + pageMinimum);
             if (-mag > pageMinimum) //TODO
             {
                 isPageSuccessful = true;

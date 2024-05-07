@@ -1,3 +1,4 @@
+using OVR.OpenVR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,18 +6,19 @@ using UnityEngine;
 
 public class NewPageGenerator : MonoBehaviour
 {
-    public int pageCount;
-    public float rMin;
-    public float rMax;
+    public float rMinGood;
+    public float rMaxGood;
+    public float rMinNoise;
+    public float rMaxNoise;
     public float theta; //Range will be from -t/2 to t/2 with 0 being the direction being faced
     public float phiMin;
     public float phiMax;
 
+    public float noiseAlpha;
+
     public GameObject pagePrefab;
     public GameObject emptyPrefab;
     public Transform focusPoint;
-
-    public Boolean isRandom;
 
     /// <summary>
     /// 0 is looking at
@@ -25,113 +27,39 @@ public class NewPageGenerator : MonoBehaviour
     /// </summary>
     public int setOrientation;
 
-    public float orientationDivider;
-
-    private Boolean isPages = false;
-
     private List<GameObject> badEmp = new List<GameObject>();
     private List<GameObject> goodEmp = new List<GameObject>();
+    
+    private Texture2D[] badComics;
+    private Texture2D[] goodComics;
+    public float goodToBadRatio;
+
+    public Transform target;
+    private bool firstPage = false;
 
     // Start is called before the first frame update
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            makePages();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            spawnPageLocations();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            deletePages();
-        }
-    }
-
-    private void spawnPageLocations()
-    {
-        if (!isPages)
-        {
-            if (isRandom)
-            {
-                for (int i = 0; i < pageCount; i++)
-                {
-                    float r = UnityEngine.Random.Range(rMin, rMax);
-                    float phi = UnityEngine.Random.Range(phiMin, phiMax);
-                    float th = UnityEngine.Random.Range(-theta / 2, theta / 2);
-                    GameObject temp = Instantiate(emptyPrefab);
-                    temp.transform.parent = transform;
-                    temp.transform.localPosition = new Vector3(r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos(th * Mathf.Deg2Rad),
-                        r * Mathf.Cos(phi/2 * Mathf.Deg2Rad) * 2,
-                        r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin(th * Mathf.Deg2Rad));
-                    temp.transform.localScale = Vector3.one;
-                    badEmp.Add(temp);
-                }
-            }
-            else
-            {
-                for (float r = rMin; r < rMax; r += 0.2f)
-                {
-                    for (float phi = phiMin; phi < phiMax; phi += 10)
-                    {
-                        for (float th = -theta / 2; th < theta / 2; th += 10)
-                        {
-                            /*
-                            Debug.Log("RMin: " + rMin + ", R: " + r + ", RMax: " + rMax);
-                            Debug.Log("PhiMin: " + phiMin + ", phi: " + phi + " PhiMax: " + phiMax);
-                            Debug.Log("ThetaMin: " + -theta / 2 + ", Theta: " + th + ", ThetaMax: " + theta / 2);
-                            */
-                            GameObject temp = Instantiate(emptyPrefab);
-                            temp.transform.parent = transform;
-                            temp.transform.localPosition = new Vector3(r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos(th * Mathf.Deg2Rad),
-                                r * Mathf.Cos(phi/2 * Mathf.Deg2Rad) * 2,
-                                r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin(th * Mathf.Deg2Rad));
-                            temp.transform.localScale = Vector3.one;
-                            badEmp.Add(temp);
-                        }
-                    }
-                }
-            }
-        }
-        isPages = true;
-    }
-
-    private void makePages()
-    {
-        if (isPages)
-        {
-            foreach (GameObject e in badEmp)
-            {
-                GameObject p = Instantiate(pagePrefab);
-                Vector3 scale = p.transform.localScale;
-                p.transform.parent = e.transform;
-                p.transform.localScale = scale;
-                p.transform.localEulerAngles = Vector3.zero;
-                p.transform.localPosition = Vector3.one;
-                Debug.Log(p.transform.position);
-                if (setOrientation == 0)
-                    p.transform.LookAt(focusPoint);
-                else if (setOrientation == 1)
-                {
-                    p.transform.LookAt(transform);
-                    p.transform.localEulerAngles = new Vector3(0, p.transform.localEulerAngles.y, 0);
-                }
-            }
-        }
-        else
-            Debug.Log("No empties");
+        goodComics = Resources.LoadAll<Texture2D>("GoodComics");
+        badComics = Resources.LoadAll<Texture2D>("BadComics");
+        Debug.Log("Good: " + goodComics.Length + ", Bad: " + badComics.Length);
     }
 
     public void makePage()
     {
-        float r = UnityEngine.Random.Range(rMin, rMax);
+        if (firstPage)
+        {
+            transform.LookAt(target);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+            firstPage = true;
+        }
+
+        bool isGood = UnityEngine.Random.Range(0f, 1f) > goodToBadRatio;
+        float r;
+        if(isGood)
+            r = UnityEngine.Random.Range(rMinGood, rMaxGood);
+        else
+            r = UnityEngine.Random.Range(rMinNoise, rMaxNoise);
         float phi = UnityEngine.Random.Range(phiMin, phiMax);
         float th = UnityEngine.Random.Range(-theta / 2, theta / 2);
         GameObject temp = Instantiate(emptyPrefab);
@@ -147,15 +75,27 @@ public class NewPageGenerator : MonoBehaviour
         newPage.transform.localPosition = Vector3.one;
         if (setOrientation == 0)
             newPage.transform.LookAt(focusPoint);
-    }
-
-    private void deletePages()
-    {
-        isPages = false;
-        foreach (GameObject e in badEmp)
+        if (isGood)
         {
-            Destroy(e);
+            int index = UnityEngine.Random.Range(0, goodComics.Length); // Get a random index
+            Renderer renderer = newPage.GetComponent<Renderer>(); // Access the Renderer component
+            if (renderer != null)
+            {
+                renderer.material.mainTexture = goodComics[index]; // Set the texture randomly
+            }
         }
-        badEmp.Clear();
+        else
+        {
+            int index = UnityEngine.Random.Range(0, badComics.Length); // Get a random index
+            Renderer renderer = newPage.GetComponent<Renderer>(); // Access the Renderer component
+            if (renderer != null)
+            {
+                renderer.material.mainTexture = badComics[index]; // Set the texture 
+            }
+
+            Color c = renderer.material.color;
+            c.a = noiseAlpha;
+            renderer.material.color = c;
+        }
     }
 }
