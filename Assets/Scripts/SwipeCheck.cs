@@ -40,9 +40,10 @@ public class SwipeCheck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         swipePose[0].WhenSelected += () => swiped();
         swipePose[0].WhenUnselected += () => unSwiped();
+        swipePose[1].WhenSelected += () => swiped();
+        swipePose[1].WhenUnselected += () => unSwiped();
     }
 
     public void Update()
@@ -58,13 +59,75 @@ public class SwipeCheck : MonoBehaviour
             isInPose = false;
         }
 
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            collidedObject = this.gameObject;
+            startPos = collidedObject.transform.position;
+            hasStartedSwiping = true;
+            currentPage = Instantiate(pageCurvePrefab);
+            currentPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
+            Vector3 tempPosition = currentPage.transform.localPosition;
+            currentPage.transform.parent = center.transform;
+            currentPage.transform.localScale = Vector3.one;
+            currentPage.transform.localPosition = Vector3.zero;
+            currentPage.transform.localEulerAngles = Vector3.zero;
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Vector3 v1 = currentPage.transform.position;
+            Vector3 v3 = pg.generateEndLocation(currentPage.GetComponent<PathCreation.Examples.PageController>().isGood);
+            Vector3 v2 = (v1 * 4 + v3) / 5f;
+            v2 = new Vector3(v2.x, v2.y + 0.3f, v2.z);
+            currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 });
+        }
 
+        if (useNewPage)
+            newPageSwipe();
+        else
+            oldPageSwipe();
+    }
 
+    public void newPageSwipe()
+    {
         if ((isInCollider && isInPose))
         {
-            if(!hasStartedSwiping)
+            if (!hasStartedSwiping)
             {
-                Debug.Log("Hih");
+                Debug.Log("Made new curve page");
+                startPos = collidedObject.transform.position;
+                hasStartedSwiping = true;
+                currentPage = Instantiate(pageCurvePrefab);
+                currentPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
+                Vector3 tempPosition = currentPage.transform.localPosition;
+                currentPage.transform.parent = center.transform;
+                currentPage.transform.localScale = Vector3.one * scaleConstant;
+                currentPage.transform.localPosition = Vector3.zero;
+                currentPage.transform.localEulerAngles = Vector3.zero;
+            }
+            //While still swiping, move page with finger
+            float mag = (startPos.y - collidedObject.transform.position.y);
+            currentPage.transform.localPosition = new Vector3(
+                currentPage.transform.localPosition.x,
+                -mag * magnitudeConstant,
+                currentPage.transform.localPosition.z);
+        }
+        if (hasStartedSwiping)
+        {
+            float mag = (startPos.y - collidedObject.transform.position.y);
+            if (-mag > pageMinimum) //TODO
+            {
+                isPageSuccessful = true;
+            }
+        }
+    }
+
+
+    public void oldPageSwipe()
+    {
+        if ((isInCollider && isInPose))
+        {
+            if (!hasStartedSwiping)
+            {
                 startPos = collidedObject.transform.position;
                 hasStartedSwiping = true;
                 currentPage = Instantiate(pagePrefab);
@@ -83,11 +146,9 @@ public class SwipeCheck : MonoBehaviour
                 -mag * magnitudeConstant,
                 currentPage.transform.localPosition.z);
         }
-        if(hasStartedSwiping)
+        if (hasStartedSwiping)
         {
             float mag = (startPos.y - collidedObject.transform.position.y);
-            //Debug.Log(-mag);
-            Debug.Log("Mag: " + -mag + ", Min: " + pageMinimum);
             if (-mag > pageMinimum) //TODO
             {
                 isPageSuccessful = true;
@@ -117,14 +178,32 @@ public class SwipeCheck : MonoBehaviour
         Debug.Log("An object has exited the collider");
         isInCollider = false;
 
-        if (hasStartedSwiping && isPageSuccessful)
+        if (useNewPage)
         {
-            isPageSuccessful = false;
-            Debug.Log("Make page");
-            pg.makePage();
+            if (hasStartedSwiping && isPageSuccessful)
+            {
+                isPageSuccessful = false;
+                Vector3 v1 = currentPage.transform.position;
+                Vector3 v3 = pg.generateEndLocation(currentPage.GetComponent<PathCreation.Examples.PageController>().isGood);
+                Vector3 v2 = (v1 * 4 + v1) / 5f;
+                v2 = new Vector3(v2.x, v2.y + 1, v2.z);
+                currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 });
+            }
+            else
+            {
+                Destroy(currentPage);
+            }
+        }
+        else
+        {
+            if (hasStartedSwiping && isPageSuccessful)
+            {
+                isPageSuccessful = false;
+                pg.makePage();
+            }
+            Destroy(currentPage);
         }
         hasStartedSwiping = false;
-        Destroy(currentPage);
     }
 
     private void OnTriggerEnter(Collider other)

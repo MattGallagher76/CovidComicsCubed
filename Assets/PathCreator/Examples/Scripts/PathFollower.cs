@@ -8,7 +8,9 @@ namespace PathCreation.Examples
     {
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
-        public float speed = 5;
+        public AnimationCurve curve;
+        public float speed;
+        public float distanceMultiplierConstant;
         float distanceTravelled;
 
         public bool follow = false;
@@ -25,16 +27,16 @@ namespace PathCreation.Examples
         {
             if (pathCreator != null && follow)
             {
-                distanceTravelled += speed * Time.deltaTime;
+                float distanceMultiplier = (curve.Evaluate(distanceTravelled / pathCreator.path.length) * distanceMultiplierConstant) + 1;
+                distanceTravelled += speed * Time.deltaTime * distanceMultiplier;
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
-                //TODO - Need to have page do something with rotation
                 //transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
             }
         }
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
-        void OnPathChanged() {
+        public void OnPathChanged() {
             distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
         }
     }

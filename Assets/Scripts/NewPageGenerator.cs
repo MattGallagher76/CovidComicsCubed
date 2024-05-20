@@ -8,11 +8,15 @@ public class NewPageGenerator : MonoBehaviour
 {
     public float rMinGood;
     public float rMaxGood;
+    public float rStepGood;
     public float rMinNoise;
     public float rMaxNoise;
+    public float rStepBad;
     public float theta; //Range will be from -t/2 to t/2 with 0 being the direction being faced
+    public float thetaStep;
     public float phiMin;
     public float phiMax;
+    public float phiStep;
 
     public float noiseAlpha;
 
@@ -27,15 +31,15 @@ public class NewPageGenerator : MonoBehaviour
     /// </summary>
     public int setOrientation;
 
-    private List<GameObject> badEmp = new List<GameObject>();
-    private List<GameObject> goodEmp = new List<GameObject>();
+    //Both of these will be set up with a R of the minimum, a better R will be chosen upon use
+    private List<Vector3> badComicLocations = new List<Vector3>();
+    private List<Vector3> goodComicLocations = new List<Vector3>();
     
     private Texture2D[] badComics;
     private Texture2D[] goodComics;
     public float goodToBadRatio;
 
-    public Transform target;
-    private bool firstPage = false;
+    private Vector3 previousPos;
 
     // Start is called before the first frame update
     void Start()
@@ -43,17 +47,69 @@ public class NewPageGenerator : MonoBehaviour
         goodComics = Resources.LoadAll<Texture2D>("GoodComics");
         badComics = Resources.LoadAll<Texture2D>("BadComics");
         Debug.Log("Good: " + goodComics.Length + ", Bad: " + badComics.Length);
+
+        int i = 0;
+        for(float phi = phiMin; phi < phiMax; phi += phiStep)
+        {
+            for(float th = -theta/2; th < theta/2; th += thetaStep)
+            {
+                float r = rMinNoise;
+                Vector3 t = new Vector3(r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th+180) * Mathf.Deg2Rad),
+                    r * Mathf.Cos(phi * Mathf.Deg2Rad),
+                    r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 180) * Mathf.Deg2Rad));
+                t *= transform.localScale.x;
+                t += transform.position;
+                badComicLocations.Insert(i, t);
+                
+                GameObject gb = Instantiate(emptyPrefab);
+                gb.transform.parent = transform;
+                gb.transform.position = t;
+                
+                r = rMinGood;
+                t = new Vector3(r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th + 180) * Mathf.Deg2Rad),
+                    r * Mathf.Cos(phi * Mathf.Deg2Rad),
+                    r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 180) * Mathf.Deg2Rad));
+                t *= transform.localScale.x;
+                t += transform.position;
+                goodComicLocations.Insert(i, t);
+                i++;
+                
+                GameObject gb2 = Instantiate(emptyPrefab);
+                gb2.transform.parent = transform;
+                gb2.transform.position = t;
+                
+            }
+        }
+
+        //float r = UnityEngine.Random.Range(rMinNoise, rMaxNoise);
+        //float phi = UnityEngine.Random.Range(phiMin, phiMax);
+        //float th = UnityEngine.Random.Range(-theta / 2, theta / 2);
+    }
+
+    public void Update()
+    {
+        if(previousPos != null)
+        {
+            if(transform.position != previousPos)
+            {
+                //Needs to update final points
+                updatePageControllers();
+            }
+        }
+        previousPos = transform.position;
+    }
+
+    private void updatePageControllers()
+    {
+        PathCreation.Examples.PageController[] pcs = FindObjectsOfType<PathCreation.Examples.PageController>();
+        foreach(PathCreation.Examples.PageController pc in pcs)
+        {
+            pc.updateLastPoint(transform.localPosition);
+        }
     }
 
     public void makePage()
     {
-        if (firstPage)
-        {
-            transform.LookAt(target);
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-            firstPage = true;
-        }
-
         bool isGood = UnityEngine.Random.Range(0f, 1f) > goodToBadRatio;
         float r;
         if(isGood)
@@ -91,6 +147,45 @@ public class NewPageGenerator : MonoBehaviour
             if (renderer != null)
             {
                 renderer.material.mainTexture = badComics[index]; // Set the texture 
+            }
+
+            Color c = renderer.material.color;
+            c.a = noiseAlpha;
+            renderer.material.color = c;
+        }
+    }
+
+    public Vector3 generateEndLocation(bool isGood)
+    {
+        if(isGood)
+            return goodComicLocations[UnityEngine.Random.Range(0, goodComicLocations.Count)];
+        else
+            return badComicLocations[UnityEngine.Random.Range(0, badComicLocations.Count)];
+    }
+
+    public bool isGood()
+    {
+        return UnityEngine.Random.Range(0f, 1f) > goodToBadRatio;
+    }
+
+    public void setPageRenderer(bool g, Renderer renderer)
+    {
+        if (g)
+        {
+            int index = UnityEngine.Random.Range(0, goodComics.Length); // Get a random index
+            if (renderer != null)
+            {
+                Debug.Log("Good - " + index);
+                renderer.material.mainTexture = goodComics[index]; // Set the texture randomly
+            }
+        }
+        else
+        {
+            int index = UnityEngine.Random.Range(0, badComics.Length); // Get a random index
+            if (renderer != null)
+            {
+                renderer.material.mainTexture = badComics[index]; // Set the texture 
+                Debug.Log("Bad - " + index);
             }
 
             Color c = renderer.material.color;

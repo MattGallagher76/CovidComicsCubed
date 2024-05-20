@@ -18,11 +18,11 @@ public class FollowPlayerNatural : MonoBehaviour
     private float rotationTimer = 0;
 
     private bool isXTracking;
-    private bool isYTracking;
+    //private bool isYTracking;
     private bool isZTracking;
 
     private float xTimer = 0;
-    private float yTimer = 0;
+    //private float yTimer = 0;
     private float zTimer = 0;
 
     public float timeToScaleUp;
@@ -203,16 +203,14 @@ public class FollowPlayerNatural : MonoBehaviour
             }
         }
 
-        //Y - TODO
-        //totalPositionChange.y = targetY;
         transform.position += totalPositionChange * positionSpeedMultiplier;
     }
 
     public void setIsInRoom(bool t)
     {
+        targetY = FindObjectOfType<isVisableTest>().getHeadHeight() - 0.2f;
         isInRegion = t;
-        targetY = (t ? playerTarget : centerRoom).position.y;
-        Debug.Log(targetY);
+        //targetY = (t ? playerTarget : centerRoom).position.y;
         transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
     }
 }
