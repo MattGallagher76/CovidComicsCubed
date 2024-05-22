@@ -28,6 +28,8 @@ public class SwipeCheck : MonoBehaviour
     private bool hasStartedSwiping = false;
     private Vector3 startPos;
     private GameObject currentPage;
+    public float nextPageOffset;
+    private GameObject nextPage;
 
     public NewPageGenerator pg;
 
@@ -37,6 +39,10 @@ public class SwipeCheck : MonoBehaviour
     public float magnitudeConstant;
     public bool useNewPage;
 
+    public float magnitudeMinimum;
+
+    public bool swipeStart;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +50,20 @@ public class SwipeCheck : MonoBehaviour
         swipePose[0].WhenUnselected += () => unSwiped();
         swipePose[1].WhenSelected += () => swiped();
         swipePose[1].WhenUnselected += () => unSwiped();
+
+        currentPage = Instantiate(pageCurvePrefab);
+        currentPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
+        currentPage.transform.parent = center.transform;
+        currentPage.transform.localScale = Vector3.one * scaleConstant;
+        currentPage.transform.localPosition = Vector3.zero;
+        currentPage.transform.localEulerAngles = Vector3.zero;
+
+        nextPage = Instantiate(pageCurvePrefab);
+        nextPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
+        nextPage.transform.parent = center.transform;
+        nextPage.transform.localScale = Vector3.one * scaleConstant;
+        nextPage.transform.localPosition = new Vector3(0, 0, nextPageOffset);
+        nextPage.transform.localEulerAngles = Vector3.zero;
     }
 
     public void Update()
@@ -59,26 +79,26 @@ public class SwipeCheck : MonoBehaviour
             isInPose = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.B) || swipeStart)
         {
-            collidedObject = this.gameObject;
-            startPos = collidedObject.transform.position;
+            swipeStart = false;
             hasStartedSwiping = true;
-            currentPage = Instantiate(pageCurvePrefab);
-            currentPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
-            Vector3 tempPosition = currentPage.transform.localPosition;
-            currentPage.transform.parent = center.transform;
-            currentPage.transform.localScale = Vector3.one;
-            currentPage.transform.localPosition = Vector3.zero;
-            currentPage.transform.localEulerAngles = Vector3.zero;
+            isPageSuccessful = true;
+            collidedObject = currentPage;
+            newPageSwipe();
+            exitCollider();
         }
-        if (Input.GetKeyDown(KeyCode.L))
+
+        if(Input.GetKeyDown(KeyCode.X))
         {
-            Vector3 v1 = currentPage.transform.position;
-            Vector3 v3 = pg.generateEndLocation(currentPage.GetComponent<PathCreation.Examples.PageController>().isGood);
-            Vector3 v2 = (v1 * 4 + v3) / 5f;
-            v2 = new Vector3(v2.x, v2.y + 0.3f, v2.z);
-            currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 });
+            for(int i = 0; i < 200; i ++)
+            {
+                hasStartedSwiping = true;
+                isPageSuccessful = true;
+                collidedObject = currentPage;
+                newPageSwipe();
+                exitCollider();
+            }
         }
 
         if (useNewPage)
@@ -96,19 +116,12 @@ public class SwipeCheck : MonoBehaviour
                 Debug.Log("Made new curve page");
                 startPos = collidedObject.transform.position;
                 hasStartedSwiping = true;
-                currentPage = Instantiate(pageCurvePrefab);
-                currentPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
-                Vector3 tempPosition = currentPage.transform.localPosition;
-                currentPage.transform.parent = center.transform;
-                currentPage.transform.localScale = Vector3.one * scaleConstant;
-                currentPage.transform.localPosition = Vector3.zero;
-                currentPage.transform.localEulerAngles = Vector3.zero;
             }
             //While still swiping, move page with finger
             float mag = (startPos.y - collidedObject.transform.position.y);
             currentPage.transform.localPosition = new Vector3(
                 currentPage.transform.localPosition.x,
-                -mag * magnitudeConstant,
+                Mathf.Max(-magnitudeMinimum, -mag * magnitudeConstant),
                 currentPage.transform.localPosition.z);
         }
         if (hasStartedSwiping)
@@ -185,13 +198,23 @@ public class SwipeCheck : MonoBehaviour
                 isPageSuccessful = false;
                 Vector3 v1 = currentPage.transform.position;
                 Vector3 v3 = pg.generateEndLocation(currentPage.GetComponent<PathCreation.Examples.PageController>().isGood);
-                Vector3 v2 = (v1 * 4 + v1) / 5f;
-                v2 = new Vector3(v2.x, v2.y + 1, v2.z);
-                currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 });
+                Vector3 v2 = (v1 * 2 + v1) / 3f;
+                v2 = new Vector3(v2.x, v2.y + 0.3f, v2.z);
+                currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 }, this.gameObject);
+
+                currentPage = nextPage;
+                nextPage.transform.localPosition = Vector3.zero;
+
+                nextPage = Instantiate(pageCurvePrefab);
+                nextPage.GetComponent<PathCreation.Examples.PageController>().setGood(pg.isGood());
+                nextPage.transform.parent = center.transform;
+                nextPage.transform.localScale = Vector3.one * scaleConstant;
+                nextPage.transform.localPosition = new Vector3(0, 0, nextPageOffset);
+                nextPage.transform.localEulerAngles = Vector3.zero;
             }
             else
             {
-                Destroy(currentPage);
+                currentPage.transform.localPosition = Vector3.zero;
             }
         }
         else

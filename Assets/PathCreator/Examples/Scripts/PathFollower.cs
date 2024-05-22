@@ -30,13 +30,13 @@ namespace PathCreation.Examples
                 float distanceMultiplier = (curve.Evaluate(distanceTravelled / pathCreator.path.length) * distanceMultiplierConstant) + 1;
                 distanceTravelled += speed * Time.deltaTime * distanceMultiplier;
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
-                //transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
             }
         }
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
         public void OnPathChanged() {
+            Debug.Log("Is this being called?");
             distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
         }
     }

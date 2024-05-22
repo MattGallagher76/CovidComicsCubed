@@ -39,4 +39,12 @@ public class pageBobble : MonoBehaviour
     {
         bobble = false;
     }
+
+    IEnumerable transition()
+    {
+        for(int i = 0; i < 100; i ++)
+        {
+            yield return null;
+        }
+    }
 }

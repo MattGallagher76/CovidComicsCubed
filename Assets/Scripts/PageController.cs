@@ -16,22 +16,36 @@ namespace PathCreation.Examples
 
         private Vector3 originalFinal;
 
+        public float transitionTime;
+        private float timer;
+        public float goodComicFinalSize;
+        public float noiseComicFinalSize;
+
+        private GameObject focusTarget;
+        private Vector3 originalScale;
+        private Vector3 originalRotation;
+        private Vector3 targetedRotation;
+
         // Update is called once per frame
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Y))
+            if(pf.follow)
             {
-                gpe.makePath();
-            }
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                pointObjects[0].transform.localPosition = new Vector3(0, 1, 2);
-                pointObjects[1].transform.localPosition = new Vector3(3, 4, 5);
-                pointObjects[2].transform.localPosition = new Vector3(2, 6, 4);
-            }
-            if(Input.GetKeyDown(KeyCode.U))
-            {
-                pf.follow = true;
+                //Over the next TIMER amount of time, bring transparency to 1 if noise, grow, and spin to face target
+                if(timer <= transitionTime)
+                {
+                    timer += Time.deltaTime;
+                    if(!isGood)
+                    {
+                        FindObjectOfType<NewPageGenerator>().PageAlphaLerp(page, timer / transitionTime);
+                        page.transform.localScale = originalScale * Mathf.Lerp(1, noiseComicFinalSize, timer / transitionTime);
+                    }
+                    else
+                    {
+                        page.transform.localScale = originalScale * Mathf.Lerp(1, goodComicFinalSize, timer / transitionTime);
+                    }
+                    page.transform.localEulerAngles = (Quaternion.Lerp(Quaternion.Euler(originalRotation), Quaternion.Euler(targetedRotation), timer / transitionTime)).eulerAngles;
+                }
             }
         }
 
@@ -40,7 +54,7 @@ namespace PathCreation.Examples
             disableBobble();
         }
 
-        public void pageCreation(Vector3[] points)
+        public void pageCreation(Vector3[] points, GameObject lookAtTarget)
         {
             transform.parent = null;
             transform.position = Vector3.zero;
@@ -56,11 +70,26 @@ namespace PathCreation.Examples
             originalFinal = points[3];
             gpe.makePath();
             pf.follow = true;
+            setOriginals(points, lookAtTarget);
+        }
+
+        public void setOriginals(Vector3[] points, GameObject lookAtTarget)
+        {
+            originalScale = page.transform.localScale;
+            originalRotation = page.transform.localEulerAngles;
+            page.transform.position = points[2];
+            page.transform.LookAt(lookAtTarget.transform);
+            page.transform.localEulerAngles = new Vector3(page.transform.localEulerAngles.x, page.transform.localEulerAngles.y, 0);
+            page.transform.position = points[0];
+            targetedRotation = page.transform.localEulerAngles;
+            page.transform.localEulerAngles = originalRotation;
+
+            Debug.Log("S: " + originalRotation + " - F: " + targetedRotation);
         }
 
         public void setGood(bool g)
         {
-            Debug.Log("SetGood being called");
+            isGood = g;
             FindObjectOfType<NewPageGenerator>().setPageRenderer(g, page.GetComponent<Renderer>());
         }
 
