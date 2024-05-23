@@ -143,10 +143,9 @@ public class FollowPlayerNatural : MonoBehaviour
                 transform.eulerAngles += scale * rotationMagnitude * rotationSpeedMultiplier * rotDist.normalized;
             }
         }
-
         //Position Tracking
         Vector3 totalPositionChange = Vector3.zero;
-
+        
         //X
         if(locDist.x > maximumForwardDifferenceX || -locDist.x > maximumBackwardDifferenceX)
         {
@@ -170,7 +169,7 @@ public class FollowPlayerNatural : MonoBehaviour
                     ? maximumPositionMagnitude : totalPositionChange.x;
 
                 float scale = 1;
-                if (rotationTimer < timeToScaleUp)
+                if (xTimer < timeToScaleUp)
                     scale = zCurve.Evaluate(xTimer / timeToScaleUp);
                 totalPositionChange.x *= scale;
             }
@@ -183,12 +182,14 @@ public class FollowPlayerNatural : MonoBehaviour
         }
         if (isZTracking)
         {
+            zTimer += Time.deltaTime;
             totalPositionChange.z = locDist.z;
 
             //Escapes tracking sequence and sets to true target
             if (Mathf.Abs(totalPositionChange.z) < minimumZDifference)
             {
                 isZTracking = false;
+                zTimer = 0;
                 totalPositionChange.z = 0;
             }
             else
@@ -197,8 +198,8 @@ public class FollowPlayerNatural : MonoBehaviour
                     ? maximumPositionMagnitude : totalPositionChange.z;
 
                 float scale = 1;
-                if (rotationTimer < timeToScaleUp)
-                    scale = zCurve.Evaluate(zTimer / timeToScaleUp);
+                if (zTimer < timeToScaleUp)
+                   scale = zCurve.Evaluate(zTimer / timeToScaleUp);
                 totalPositionChange.z *= scale;
             }
         }

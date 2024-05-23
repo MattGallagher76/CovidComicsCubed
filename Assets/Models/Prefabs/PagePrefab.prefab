@@ -100,4 +100,4 @@ MonoBehaviour:
   magnitudeUpperBound: 1.2
   frequencyLowerBound: 0.5
   frequencyUpperBound: 0.7
-  bobble: 1
+  initialPeriodTimer: 1.5

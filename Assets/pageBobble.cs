@@ -11,11 +11,13 @@ public class pageBobble : MonoBehaviour
     public float frequencyUpperBound;
 
     private float magnitude;
+    private float currentMag = 0;
     private float frequency;
 
     private float start = 0;
 
-    public bool bobble = true;
+    private Vector3 referenceLocalLocation;
+    public float initialPeriodTimer;
 
     private void Start()
     {
@@ -23,27 +25,38 @@ public class pageBobble : MonoBehaviour
         frequency = UnityEngine.Random.Range(frequencyLowerBound, frequencyUpperBound);
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator startBobble()
     {
-        if(bobble)
+        Debug.Log("Frequency: " + frequency);
+        Debug.Log("Started startBobble");
+        referenceLocalLocation = transform.localPosition;
+        Debug.Log("-----------------------------------------------------------------");
+        for(float timer = 0; timer <= initialPeriodTimer; timer += Time.deltaTime)
         {
+            Debug.Log("Time: " + timer + ", out of: " + initialPeriodTimer + ", increment: " + Time.deltaTime);
+            currentMag = Mathf.Lerp(0, magnitude, timer / initialPeriodTimer);
+            Vector3 temp = referenceLocalLocation + new Vector3(0,
+                Mathf.Sin(start * frequency) * currentMag,
+                0);
+            transform.localPosition = temp;
             start += Time.deltaTime;
-            transform.localPosition = new Vector3(transform.localPosition.x,
-                Mathf.Sin(start * frequency) * magnitude,
-                transform.localPosition.z);
+            //if (timer + Time.deltaTime >= initialPeriodTimer)
+                //StartCoroutine("bobble");
+            yield return null;
         }
     }
 
-    public void disableBobble()
+    IEnumerator bobble()
     {
-        bobble = false;
-    }
-
-    IEnumerable transition()
-    {
-        for(int i = 0; i < 100; i ++)
+        Debug.Log("Started bobble");
+        for (; ; )
         {
+            Vector3 temp = referenceLocalLocation + new Vector3(0,
+                Mathf.Sin(start * frequency) * currentMag,
+                0);
+            Debug.Log("Constant bobble: " + temp + ", Start: " + start + ", sin: " + Mathf.Sin(start * frequency));
+            transform.localPosition = temp;
+            start += Time.deltaTime;
             yield return null;
         }
     }

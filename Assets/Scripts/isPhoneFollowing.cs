@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class isPhoneFollowing : MonoBehaviour
 {
-    public followPlayerSmooth fps;
+    public GameObject phoneToHide;
+    public float coroutineDuration;
     public FollowPlayerNatural fpn;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private Vector3 initialScale;
+    public AnimationCurve scaleCurve;
+    // Start is called before the first frame 
+
+    private void Start()
     {
-        
+        initialScale = phoneToHide.transform.localScale;
+        phoneToHide.transform.localScale = Vector3.zero;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals("MainCamera"))
         {
-            fps.setIsInRoom(true);
+            StartCoroutine(scaleUpPhone());
             fpn.setIsInRoom(true);
         }
     }
@@ -31,8 +31,26 @@ public class isPhoneFollowing : MonoBehaviour
     {
         if (other.tag.Equals("MainCamera"))
         {
-            fps.setIsInRoom(false);
+            StartCoroutine(scaleDownPhone());
             fpn.setIsInRoom(false);
+        }
+    }
+
+    IEnumerator scaleUpPhone()
+    {
+        for(int i = 1; i <= coroutineDuration; i ++)
+        {
+            phoneToHide.transform.localScale = Vector3.Lerp(Vector3.zero, initialScale, scaleCurve.Evaluate(((float)i) / coroutineDuration));
+            yield return null;
+        }
+    }
+
+    IEnumerator scaleDownPhone()
+    {
+        for (int i = 1; i <= coroutineDuration; i++)
+        {
+            phoneToHide.transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, scaleCurve.Evaluate(((float)i) / coroutineDuration));
+            yield return null;
         }
     }
 }

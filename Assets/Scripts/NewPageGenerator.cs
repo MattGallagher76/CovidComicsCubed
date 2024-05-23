@@ -41,8 +41,6 @@ public class NewPageGenerator : MonoBehaviour
 
     private Vector3 previousPos;
 
-    public GameObject phone;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -64,12 +62,10 @@ public class NewPageGenerator : MonoBehaviour
                 t += transform.position;
                 badComicLocations.Insert(i, t);
                 
-                /*
                 GameObject gb = Instantiate(emptyPrefab);
                 gb.transform.parent = transform;
                 gb.transform.position = t;
-                */
-
+                
                 r = UnityEngine.Random.Range(rMinGood, rMaxGood);
                 t = new Vector3(1.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th + 180) * Mathf.Deg2Rad),
                     2 * r * Mathf.Cos(phi * Mathf.Deg2Rad),
@@ -79,11 +75,9 @@ public class NewPageGenerator : MonoBehaviour
                 goodComicLocations.Insert(i, t);
                 i++;
                 
-                /*
                 GameObject gb2 = Instantiate(emptyPrefab);
                 gb2.transform.parent = transform;
                 gb2.transform.position = t;
-                */
             }
         }
 
@@ -108,7 +102,6 @@ public class NewPageGenerator : MonoBehaviour
 
     private void updatePageControllers()
     {
-        Debug.Log("2");
         PathCreation.Examples.PageController[] pcs = FindObjectsOfType<PathCreation.Examples.PageController>();
         foreach(PathCreation.Examples.PageController pc in pcs)
         {

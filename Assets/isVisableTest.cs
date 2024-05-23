@@ -50,6 +50,8 @@ public class isVisableTest : MonoBehaviour
 
     public float getHeadHeight()
     {
+        if (totalSum == 0 || totalCalls == 0)
+            throw new System.Exception("Player has not seen comic");
         return totalSum / totalCalls;
     }
 }

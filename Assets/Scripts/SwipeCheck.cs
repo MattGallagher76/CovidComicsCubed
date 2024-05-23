@@ -91,7 +91,7 @@ public class SwipeCheck : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.X))
         {
-            for(int i = 0; i < 200; i ++)
+            for(int i = 0; i < 50; i ++)
             {
                 hasStartedSwiping = true;
                 isPageSuccessful = true;
@@ -101,10 +101,7 @@ public class SwipeCheck : MonoBehaviour
             }
         }
 
-        if (useNewPage)
-            newPageSwipe();
-        else
-            oldPageSwipe();
+        newPageSwipe();
     }
 
     public void newPageSwipe()
@@ -122,41 +119,6 @@ public class SwipeCheck : MonoBehaviour
             currentPage.transform.localPosition = new Vector3(
                 currentPage.transform.localPosition.x,
                 Mathf.Max(-magnitudeMinimum, -mag * magnitudeConstant),
-                currentPage.transform.localPosition.z);
-        }
-        if (hasStartedSwiping)
-        {
-            float mag = (startPos.y - collidedObject.transform.position.y);
-            if (-mag > pageMinimum) //TODO
-            {
-                isPageSuccessful = true;
-            }
-        }
-    }
-
-
-    public void oldPageSwipe()
-    {
-        if ((isInCollider && isInPose))
-        {
-            if (!hasStartedSwiping)
-            {
-                startPos = collidedObject.transform.position;
-                hasStartedSwiping = true;
-                currentPage = Instantiate(pagePrefab);
-                currentPage.GetComponent<pageBobble>().disableBobble();
-                Vector3 tempScale = currentPage.transform.localScale;
-                Vector3 tempPosition = currentPage.transform.localPosition;
-                currentPage.transform.parent = center.transform;
-                currentPage.transform.localScale = tempScale * scaleConstant;
-                currentPage.transform.localPosition = Vector3.zero;
-                currentPage.transform.localEulerAngles = Vector3.zero;
-            }
-            //While still swiping, move page with finger
-            float mag = (startPos.y - collidedObject.transform.position.y);
-            currentPage.transform.localPosition = new Vector3(
-                currentPage.transform.localPosition.x,
-                -mag * magnitudeConstant,
                 currentPage.transform.localPosition.z);
         }
         if (hasStartedSwiping)
@@ -198,7 +160,7 @@ public class SwipeCheck : MonoBehaviour
                 isPageSuccessful = false;
                 Vector3 v1 = currentPage.transform.position;
                 Vector3 v3 = pg.generateEndLocation(currentPage.GetComponent<PathCreation.Examples.PageController>().isGood);
-                Vector3 v2 = (v1 * 2 + v1) / 3f;
+                Vector3 v2 = (v1 * 2 + v3) / 3f;
                 v2 = new Vector3(v2.x, v2.y + 0.3f, v2.z);
                 currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 }, this.gameObject);
 

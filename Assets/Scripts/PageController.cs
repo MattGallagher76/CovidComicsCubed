@@ -26,6 +26,13 @@ namespace PathCreation.Examples
         private Vector3 originalRotation;
         private Vector3 targetedRotation;
 
+        public IEnumerator startBobbleCoroutine;
+
+        public void Start()
+        {
+            //startBobbleCoroutine = page.GetComponent<pageBobble>().
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -34,7 +41,6 @@ namespace PathCreation.Examples
                 //Over the next TIMER amount of time, bring transparency to 1 if noise, grow, and spin to face target
                 if(timer <= transitionTime)
                 {
-                    timer += Time.deltaTime;
                     if(!isGood)
                     {
                         FindObjectOfType<NewPageGenerator>().PageAlphaLerp(page, timer / transitionTime);
@@ -45,13 +51,16 @@ namespace PathCreation.Examples
                         page.transform.localScale = originalScale * Mathf.Lerp(1, goodComicFinalSize, timer / transitionTime);
                     }
                     page.transform.localEulerAngles = (Quaternion.Lerp(Quaternion.Euler(originalRotation), Quaternion.Euler(targetedRotation), timer / transitionTime)).eulerAngles;
+                    if (timer != transitionTime)
+                        timer = Mathf.Min(timer + Time.deltaTime, transitionTime);
+                    if (timer == transitionTime)
+                    {
+                        Debug.Log("Coroutine initiated");
+                        page.GetComponent<pageBobble>().StartCoroutine("startBobble");
+                        timer = transitionTime + 1f;
+                    }
                 }
             }
-        }
-
-        private void Start()
-        {
-            disableBobble();
         }
 
         public void pageCreation(Vector3[] points, GameObject lookAtTarget)
@@ -83,19 +92,12 @@ namespace PathCreation.Examples
             page.transform.position = points[0];
             targetedRotation = page.transform.localEulerAngles;
             page.transform.localEulerAngles = originalRotation;
-
-            Debug.Log("S: " + originalRotation + " - F: " + targetedRotation);
         }
 
         public void setGood(bool g)
         {
             isGood = g;
             FindObjectOfType<NewPageGenerator>().setPageRenderer(g, page.GetComponent<Renderer>());
-        }
-
-        public void disableBobble()
-        {
-            page.GetComponent<pageBobble>().disableBobble();
         }
 
         public void updateLastPoint(Vector3 t)
