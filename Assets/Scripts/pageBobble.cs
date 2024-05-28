@@ -33,7 +33,7 @@ public class pageBobble : MonoBehaviour
         for(float timer = 0; timer <= initialPeriodTimer; timer += Time.deltaTime)
         {
             currentMag = Mathf.Lerp(0, magnitude, timer / initialPeriodTimer);
-            Vector3 temp = referenceLocalLocation + new Vector3(0,
+            Vector3 temp = referenceLocalLocation + new Vector3(Mathf.PerlinNoise1D(timer / 2) * currentMag,
                 Mathf.Sin(start * frequency) * currentMag,
                 0);
             transform.localPosition = temp;
@@ -47,7 +47,7 @@ public class pageBobble : MonoBehaviour
     {
         for (; ; )
         {
-            Vector3 temp = referenceLocalLocation + new Vector3(0,
+            Vector3 temp = referenceLocalLocation + new Vector3(Mathf.PerlinNoise1D(start / 2) * currentMag,
                 Mathf.Sin(start * frequency) * currentMag,
                 0);
             transform.localPosition = temp;

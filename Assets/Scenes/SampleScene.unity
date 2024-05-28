@@ -1871,8 +1871,6 @@ MonoBehaviour:
   cm: {fileID: 1544934450}
   timer: 9.5
   hasDisapeared: 0
-  otherHides:
-  - {fileID: 1073438692}
   head: {fileID: 1544934446}
   zoom: {fileID: 570865280}
 --- !u!64 &1147158396

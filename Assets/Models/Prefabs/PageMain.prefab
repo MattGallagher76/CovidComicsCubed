@@ -358,19 +358,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8947949185129898852, guid: 39b00fde6f19d2e4aac03136b8914289, type: 3}
       propertyPath: frequencyLowerBound
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8947949185129898852, guid: 39b00fde6f19d2e4aac03136b8914289, type: 3}
       propertyPath: frequencyUpperBound
-      value: 1.4
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 8947949185129898852, guid: 39b00fde6f19d2e4aac03136b8914289, type: 3}
       propertyPath: magnitudeLowerBound
-      value: 0.03
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 8947949185129898852, guid: 39b00fde6f19d2e4aac03136b8914289, type: 3}
       propertyPath: magnitudeUpperBound
-      value: 0.06
+      value: 0.08
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
