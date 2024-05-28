@@ -27,6 +27,7 @@ public class pageBobble : MonoBehaviour
 
     IEnumerator startBobble()
     {
+        /*
         Debug.Log("Frequency: " + frequency);
         Debug.Log("Started startBobble");
         referenceLocalLocation = transform.localPosition;
@@ -44,10 +45,13 @@ public class pageBobble : MonoBehaviour
                 //StartCoroutine("bobble");
             yield return null;
         }
+        */
+        yield return null;
     }
 
     IEnumerator bobble()
     {
+        /*
         Debug.Log("Started bobble");
         for (; ; )
         {
@@ -59,5 +63,7 @@ public class pageBobble : MonoBehaviour
             start += Time.deltaTime;
             yield return null;
         }
+        */
+        yield return null;
     }
 }
