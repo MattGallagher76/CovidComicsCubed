@@ -26,8 +26,6 @@ namespace PathCreation.Examples
         private Vector3 originalRotation;
         private Vector3 targetedRotation;
 
-        public IEnumerator startBobbleCoroutine;
-
         public void Start()
         {
             //startBobbleCoroutine = page.GetComponent<pageBobble>().
@@ -55,8 +53,6 @@ namespace PathCreation.Examples
                         timer = Mathf.Min(timer + Time.deltaTime, transitionTime);
                     if (timer == transitionTime)
                     {
-                        Debug.Log("Coroutine initiated");
-                        page.GetComponent<pageBobble>().StartCoroutine("startBobble");
                         timer = transitionTime + 1f;
                     }
                 }

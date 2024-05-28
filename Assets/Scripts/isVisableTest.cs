@@ -15,6 +15,8 @@ public class isVisableTest : MonoBehaviour
 
     public GameObject head;
 
+    public Animator zoom;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +32,7 @@ public class isVisableTest : MonoBehaviour
             if (temp.x >= 0 && temp.x <= 1 && temp.y >= 0 && temp.y <= 1 && temp.z > 0)
             {
                 timer -= Time.deltaTime;
-                transform.localScale = startingScale * Mathf.Lerp(1f, 0.8f, (5f - timer) / 5f);
+                zoom.SetBool("zoom", true);
                 totalSum += head.transform.position.y;
                 totalCalls++;
             }
@@ -39,6 +41,7 @@ public class isVisableTest : MonoBehaviour
                 totalSum = 0;
                 totalCalls = 0;
                 timer = 5;
+                zoom.SetBool("zoom", false);
             }
         }
         if(timer <= 0)

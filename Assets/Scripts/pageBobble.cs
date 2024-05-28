@@ -23,47 +23,36 @@ public class pageBobble : MonoBehaviour
     {
         magnitude = UnityEngine.Random.Range(magnitudeLowerBound, magnitudeUpperBound);
         frequency = UnityEngine.Random.Range(frequencyLowerBound, frequencyUpperBound);
+        if (magnitude == 0 || frequency == 0)
+            Debug.Log("WE GOT ONE");
     }
 
     IEnumerator startBobble()
     {
-        /*
-        Debug.Log("Frequency: " + frequency);
-        Debug.Log("Started startBobble");
         referenceLocalLocation = transform.localPosition;
-        Debug.Log("-----------------------------------------------------------------");
         for(float timer = 0; timer <= initialPeriodTimer; timer += Time.deltaTime)
         {
-            Debug.Log("Time: " + timer + ", out of: " + initialPeriodTimer + ", increment: " + Time.deltaTime);
             currentMag = Mathf.Lerp(0, magnitude, timer / initialPeriodTimer);
             Vector3 temp = referenceLocalLocation + new Vector3(0,
                 Mathf.Sin(start * frequency) * currentMag,
                 0);
             transform.localPosition = temp;
             start += Time.deltaTime;
-            //if (timer + Time.deltaTime >= initialPeriodTimer)
-                //StartCoroutine("bobble");
             yield return null;
         }
-        */
-        yield return null;
+        StartCoroutine("bobble");
     }
 
     IEnumerator bobble()
     {
-        /*
-        Debug.Log("Started bobble");
         for (; ; )
         {
             Vector3 temp = referenceLocalLocation + new Vector3(0,
                 Mathf.Sin(start * frequency) * currentMag,
                 0);
-            Debug.Log("Constant bobble: " + temp + ", Start: " + start + ", sin: " + Mathf.Sin(start * frequency));
             transform.localPosition = temp;
             start += Time.deltaTime;
             yield return null;
         }
-        */
-        yield return null;
     }
 }

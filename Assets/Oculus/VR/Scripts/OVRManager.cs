@@ -2991,11 +2991,11 @@ public class OVRManager : MonoBehaviour, OVRMixedRealityCaptureConfiguration
     {
         if (focus)
         {
-            Debug.Log("[OVRManager] OnApplicationFocus(true)");
+            //Debug.Log("[OVRManager] OnApplicationFocus(true)");
         }
         else
         {
-            Debug.Log("[OVRManager] OnApplicationFocus(false)");
+            //Debug.Log("[OVRManager] OnApplicationFocus(false)");
         }
     }
 

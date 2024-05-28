@@ -32,7 +32,9 @@ namespace PathCreation.Examples
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
                 if (distanceTravelled >= pathCreator.path.length)
                 {
+                    Debug.Log("Path Ended");
                     follow = false;
+                    GetComponent<pageBobble>().StartCoroutine("startBobble");
                     //speed /= 10f;
                 }
             }
