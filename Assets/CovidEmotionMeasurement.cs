@@ -7,24 +7,23 @@ public class CovidEmotionMeasurement : MonoBehaviour
     enum emotion { HAPPY, BOTHERED, ANGRY };
 
     public GameObject playerRef;
-    public Color happy;
-    public Color angry;
+    public Gradient emotionalSpectrum;
     public int checkInterval;
     public float maximumEmotionValue;
 
-    public GameObject ringPrefab;
-
     private float emotionValue = 0;
     private float distance = 2; //6 feet
+    public Renderer r;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Create ring around gameObject with radius of distance\
-        GameObject gb = Instantiate(ringPrefab);
-        gb.transform.parent = transform;
-        gb.transform.localScale = new Vector3(distance * 2, 0.01f, distance * 2);
         StartCoroutine("checkEmotion");
+    }
+
+    public float getEV()
+    {
+        return emotionValue;
     }
 
     // Update is called once per frame
@@ -36,7 +35,7 @@ public class CovidEmotionMeasurement : MonoBehaviour
     IEnumerator checkEmotion()
     {
         int i = 0;
-        for(; ;)
+        for (; ; )
         {
             if (i == checkInterval)
             {
@@ -44,22 +43,18 @@ public class CovidEmotionMeasurement : MonoBehaviour
                 Vector3 ref1 = new Vector3(playerRef.transform.position.x, 0, playerRef.transform.position.z);
                 Vector3 ref2 = new Vector3(transform.position.x, 0, transform.position.z);
                 float dist = Mathf.Abs(Vector3.Distance(ref1, ref2));
-                if (dist < distance/2)
+                if (dist < distance)
                 {
-                    emotionValue = Mathf.Min((emotionValue + 10) * 1.3f, maximumEmotionValue);
-                }
-                else if (dist < distance)
-                {
-                    emotionValue = Mathf.Min(maximumEmotionValue, emotionValue + 10);
+                    emotionValue = Mathf.Min(maximumEmotionValue, emotionValue + (distance - dist));
                 }
                 else
                 {
-                    emotionValue = Mathf.Max(emotionValue - 15, 0);
+                    emotionValue = Mathf.Max((emotionValue - 0.01f) * 0.975f, 0);
                 }
-                Debug.Log("EV: " + emotionValue);
             }
             else
                 i++;
+            r.material.color = emotionalSpectrum.Evaluate(emotionValue / maximumEmotionValue);
             yield return true;
         }
     }

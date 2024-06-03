@@ -8,6 +8,16 @@ namespace PathCreation.Examples {
 
         public bool closedLoop = true;
         public Transform[] waypoints;
+        public bool isPage = false;
+
+        public void Start()
+        {
+            if (!isPage)
+            {
+                makePath();
+                GetComponent<RoadMeshCreator>().TriggerUpdate();
+            }
+        }
 
         public void makePath()
         {
@@ -16,6 +26,15 @@ namespace PathCreation.Examples {
                 // Create a new bezier path from the waypoints.
                 BezierPath bezierPath = new BezierPath(waypoints, closedLoop, PathSpace.xyz);
                 GetComponent<PathCreator>().bezierPath = bezierPath;
+            }
+        }
+
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                makePath();
+                GetComponent<RoadMeshCreator>().TriggerUpdate();
             }
         }
     }

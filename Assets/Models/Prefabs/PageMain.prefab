@@ -139,6 +139,7 @@ MonoBehaviour:
   - {fileID: 1623559470051576068}
   - {fileID: 4388722353912994891}
   - {fileID: 810722923449085843}
+  isPage: 1
 --- !u!114 &3315715022000055202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +172,7 @@ MonoBehaviour:
       - 0
       globalNormalsAngle: 0
       flipNormals: 0
-    vertexPathUpToDate: 1
+    vertexPathUpToDate: 0
     vertexPathMaxAngleError: 0.3
     vertexPathMinVertexSpacing: 0.01
     showTransformTool: 1
