@@ -20,9 +20,15 @@ namespace PathCreation.Examples
         private GameObject criticalPointReference;
         public GameObject emptyPrefab;
 
-        private float maximumPlayerDistance = 5.15f;
+        private float maximumPlayerDistance = 5f;
 
-        public float k;
+        public float maximumSpeed;
+        public float speedCoefficient;
+
+        private float currentDistance = 0f;
+
+        [Tooltip("True if the women should mirror the jogger. False if the women should head towards the critical point to start")]
+        public bool isMirroring;
 
         void Start()
         {
@@ -34,33 +40,29 @@ namespace PathCreation.Examples
         {
             Vector3 ref1 = playerRef.transform.position;
             ref1 = new Vector3(ref1.x, 0f, ref1.z);
-
+            
             Vector3 ref2 = criticalPointReference.transform.position;
             ref2 = new Vector3(ref2.x, 0f, ref2.z);
 
             float dist = Mathf.Abs(Vector3.Distance(ref1, ref2));
 
-            float targetDistanceTraveled = (maximumPlayerDistance - dist) / maximumPlayerDistance * pathCreator.path.length * criticalPointOffset;
+            float target;
+            if (isMirroring)
+                target = (maximumPlayerDistance - dist) / maximumPlayerDistance * pathCreator.path.length * criticalPointOffset;
+            else
+                target = (dist < maximumPlayerDistance) ? pathCreator.path.length * criticalPointOffset : 0f;
 
-            Vector3 ref3 = transform.position;
-            ref3 = new Vector3(ref3.x, 0f, ref3.z);
-            dist = Mathf.Abs(Vector3.Distance(ref3, ref2));
-            float distanceTravelled = (maximumPlayerDistance - dist) / maximumPlayerDistance * pathCreator.path.length * criticalPointOffset;
-
-            float difference = targetDistanceTraveled - distanceTravelled;
+            currentDistance += (Mathf.Min(maximumSpeed, (target - currentDistance) * speedCoefficient));
 
             if (pathCreator != null && follow)
             {
-                Debug.Log(difference);
-                transform.position = pathCreator.path.GetPointAtDistance(difference * k, endOfPathInstruction);
-                transform.rotation = pathCreator.path.GetRotationAtDistance(difference * k, endOfPathInstruction);
+                transform.position = pathCreator.path.GetPointAtDistance(currentDistance, endOfPathInstruction);
+                transform.rotation = pathCreator.path.GetRotationAtDistance(currentDistance, endOfPathInstruction);
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0);
             }
 
-            Vector3 vel = Vector3.zero;
-
-            animator.SetFloat("Speed", vel.z);
-            animator.SetFloat("AnimationSpeed", vel.z * animationSpeedCoef);
+            animator.SetFloat("Speed", (target - currentDistance) * speedCoef);
+            animator.SetFloat("AnimationSpeed", (target - currentDistance) * animationSpeedCoef);
         }
     }
 }

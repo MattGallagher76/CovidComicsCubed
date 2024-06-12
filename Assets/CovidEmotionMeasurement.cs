@@ -15,10 +15,24 @@ public class CovidEmotionMeasurement : MonoBehaviour
     private float distance = 2; //6 feet
     public Renderer r;
 
+    [Range(0, 1f)]
+    public float alpha;
+
+    public bool alphaMap;
+
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine("checkEmotion");
+        if (alphaMap)
+        {
+
+        }
+        else
+        {
+            r.material.color = new Color(r.material.color.r, r.material.color.g, r.material.color.b, alpha);
+        }
+    }
     }
 
     public float getEV()
@@ -30,6 +44,11 @@ public class CovidEmotionMeasurement : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public Color spectrum()
+    {
+        return r.material.color;
     }
 
     IEnumerator checkEmotion()
@@ -54,7 +73,14 @@ public class CovidEmotionMeasurement : MonoBehaviour
             }
             else
                 i++;
-            r.material.color = emotionalSpectrum.Evaluate(emotionValue / maximumEmotionValue);
+            if (alphaMap)
+            {
+
+            }
+            else
+            {
+                r.material.color = emotionalSpectrum.Evaluate(emotionValue / maximumEmotionValue);
+            }
             yield return true;
         }
     }
