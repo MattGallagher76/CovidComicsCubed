@@ -23,21 +23,21 @@ public class CovidEmotionMeasurement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        r.material.color = new Color(r.material.color.r, r.material.color.g, r.material.color.b, (alphaMap) ? r.material.color.a : alpha);
         StartCoroutine("checkEmotion");
-        if (alphaMap)
-        {
-
-        }
-        else
-        {
-            r.material.color = new Color(r.material.color.r, r.material.color.g, r.material.color.b, alpha);
-        }
-    }
     }
 
     public float getEV()
     {
         return emotionValue;
+    }
+
+    public void debugSetEv(float newEv)
+    {
+        if (newEv < 0)
+            emotionValue = maximumEmotionValue;
+        else
+            emotionValue = newEv;
     }
 
     // Update is called once per frame
@@ -73,14 +73,9 @@ public class CovidEmotionMeasurement : MonoBehaviour
             }
             else
                 i++;
-            if (alphaMap)
-            {
-
-            }
-            else
-            {
-                r.material.color = emotionalSpectrum.Evaluate(emotionValue / maximumEmotionValue);
-            }
+            Color c = emotionalSpectrum.Evaluate(emotionValue / maximumEmotionValue);
+            c = new Color(c.r, c.g, c.b, (alphaMap) ? r.material.color.a : alpha);
+            r.material.color = c;
             yield return true;
         }
     }

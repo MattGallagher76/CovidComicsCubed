@@ -163,7 +163,7 @@ public class ArrowMeshGenerator : MonoBehaviour
         c = new Color(c.r, c.g, c.b, Interpolate(minimumLengthVisible, minimumLengthFullVisibility, length));
         GetComponent<MeshRenderer>().material.color = c;
 
-        textObj.GetComponent<MeshRenderer>().material.color = new Color(Color.black.r, Color.black.g, Color.black.b, c.a);
+        textObj.GetComponent<TMPro.TextMeshPro>().color = new Color(Color.black.r, Color.black.g, Color.black.b, c.a);
     }
 
     public float Interpolate(float a, float b, float c)
