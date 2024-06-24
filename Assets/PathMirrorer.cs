@@ -11,6 +11,10 @@ namespace PathCreation.Examples
         
         [SerializeField] private float speedCoef;
         [SerializeField] private float animationSpeedCoef;
+
+        [SerializeField] private float sideSpeedCoef;
+        [SerializeField] private float sideAnimationSpeedCoef;
+
         public Animator animator;
 
         public bool follow = false;
@@ -35,6 +39,16 @@ namespace PathCreation.Examples
         public AnimationCurve ShuffleCurve;
 
         public GameObject[] shufflePositions;
+
+        private Vector3 PivotPoint;
+
+        public Vector3 mirrorOrigin;
+        public Vector3 mirrorNormal;
+        public float shuffleMaxSpeed;
+        public GameObject tempMirrored;
+        public GameObject tempNormal;
+        public GameObject tempToBeMirrored;
+        public GameObject tempOrigin;
 
         void Start()
         {
@@ -92,7 +106,7 @@ namespace PathCreation.Examples
                     {
                         Debug.Log("REACH");
                         currentStage = stage.REACH;
-                        walkToTargetSetup();
+                        //StartCoroutine(mirrorPlayer());
                     }
                     //The women has gotten to the critical point and we are waiting for the user to get close enough
                     break;
@@ -109,6 +123,31 @@ namespace PathCreation.Examples
                     //Continue jogging along path
                     break;
             }
+        }
+
+        IEnumerator mirrorPlayer()
+        {
+            for(; ;)
+            {
+                Vector3 playerLocalPos = playerRef.transform.position - transform.position + mirrorOrigin;
+                Vector3 target = MirrorVector(playerLocalPos, mirrorNormal) + mirrorOrigin;
+                tempNormal.transform.localPosition = mirrorNormal;
+                tempToBeMirrored.transform.localPosition = playerLocalPos;
+                tempMirrored.transform.localPosition = target;
+                tempOrigin.transform.localPosition = mirrorOrigin;
+                yield return null;
+            }
+        }
+
+        public static Vector3 MirrorVector(Vector3 vector, Vector3 normal)
+        {
+            // Normalize the normal vector to ensure it's a unit vector
+            normal.Normalize();
+
+            // Calculate the reflected vector using the formula
+            Vector3 reflectedVector = vector - 2 * Vector3.Dot(vector, normal) * normal;
+
+            return reflectedVector;
         }
 
         void walkToTargetSetup()
@@ -137,7 +176,13 @@ namespace PathCreation.Examples
             for(int i = 0; i < 400; i ++)
             {
                 Debug.Log(i);
-                transform.position = Vector3.Lerp(a, b, i / 400f * ShuffleCurve.Evaluate(i / 400f));
+                Vector3 temp = Vector3.Lerp(a, b, i / 400f * ShuffleCurve.Evaluate(i / 400f));
+                float dif = (transform.position - temp).magnitude;
+
+                animator.SetFloat("SideSpeed", dif * sideSpeedCoef);
+                animator.SetFloat("SideAnimationSpeed", dif * sideAnimationSpeedCoef);
+
+                transform.position = temp;
                 yield return null;
             }
             StartCoroutine(waitToWalkToTarget());
@@ -154,7 +199,7 @@ namespace PathCreation.Examples
                 Vector3 ref2 = this.transform.position;
                 ref2 = new Vector3(ref2.x, 0f, ref2.z);
                 float dist = Mathf.Abs(Vector3.Distance(ref1, ref2));
-                if (dist > 3)
+                if (dist > 0)
                 {
                     k = false;
                     walkToTargetSetup();
