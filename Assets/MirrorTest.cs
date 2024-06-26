@@ -16,6 +16,13 @@ public class MirrorTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (vectorToMirror.Equals(Vector3.zero))
+            vectorToMirror = objectWithVectorToMirror.transform.position;
+        if (normalVector.Equals(Vector3.zero))
+            normalVector = normalObject.transform.position;
+        if (originOffset.Equals(Vector3.zero))
+            originOffset = mirrorOrigin.transform.position;
+
         objectWithVectorToMirror.transform.localScale = Vector3.one * 0.1f;
         normalObject.transform.localScale = Vector3.one * 0.1f;
         finalObject.transform.localScale = Vector3.one * 0.1f;
@@ -26,9 +33,7 @@ public class MirrorTest : MonoBehaviour
     void Update()
     {
         normalObject.transform.localPosition = normalVector;
-        objectWithVectorToMirror.transform.localPosition = vectorToMirror + originOffset;
-        finalObject.transform.localPosition = MirrorVector(vectorToMirror, normalVector) + originOffset;
-        mirrorOrigin.transform.localPosition = originOffset;
+        finalObject.transform.localPosition = - MirrorVector(vectorToMirror, normalVector);
     }
 
     public static Vector3 MirrorVector(Vector3 vector, Vector3 normal)

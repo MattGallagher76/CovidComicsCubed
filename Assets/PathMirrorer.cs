@@ -37,18 +37,13 @@ namespace PathCreation.Examples
         private stage currentStage = stage.WAIT;
 
         public AnimationCurve ShuffleCurve;
+        public AnimationCurve speedCurve;
 
-        public GameObject[] shufflePositions;
-
-        private Vector3 PivotPoint;
-
-        public Vector3 mirrorOrigin;
-        public Vector3 mirrorNormal;
         public float shuffleMaxSpeed;
-        public GameObject tempMirrored;
-        public GameObject tempNormal;
-        public GameObject tempToBeMirrored;
-        public GameObject tempOrigin;
+        public float shuffleTimer;
+        public Transform finalLocation;
+        Vector3 savedCurrentPosition;
+        public float tempSpeedCoef;
 
         void Start()
         {
@@ -112,6 +107,19 @@ namespace PathCreation.Examples
                     break;
                 case stage.REACH:
                     //The user has gotten close enough to the women to start the akward shimmy
+                    if(shuffleTimer >= 0f)
+                    {
+                        shuffleTimer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        Debug.Log("END");
+                        currentStage = stage.END;
+                        savedCurrentPosition = transform.position;
+                        transform.LookAt(finalLocation);
+                        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0); 
+                        StartCoroutine(walkToTarget(savedCurrentPosition, finalLocation.position));
+                    }
                     break;
                 case stage.ANGER:
                     //The woman's EV is too high and it is time for her to say something
@@ -125,19 +133,28 @@ namespace PathCreation.Examples
             }
         }
 
-        IEnumerator mirrorPlayer()
+        IEnumerator walkToTarget(Vector3 a, Vector3 b)
         {
-            for(; ;)
+            for (int i = 0; i < 400; i++)
             {
-                Vector3 playerLocalPos = playerRef.transform.position - transform.position + mirrorOrigin;
-                Vector3 target = MirrorVector(playerLocalPos, mirrorNormal) + mirrorOrigin;
-                tempNormal.transform.localPosition = mirrorNormal;
-                tempToBeMirrored.transform.localPosition = playerLocalPos;
-                tempMirrored.transform.localPosition = target;
-                tempOrigin.transform.localPosition = mirrorOrigin;
+                Debug.Log(i);
+                Vector3 temp = Vector3.Lerp(a, b, i / 400f * ShuffleCurve.Evaluate(i / 400f));
+                float dif = (transform.position - temp).magnitude;
+
+                animator.SetFloat("Speed", (Mathf.Min(maximumSpeed, (speedCurve.Evaluate(i / 400f)) * tempSpeedCoef)) * speedCoef);
+                animator.SetFloat("AnimationSpeed", (Mathf.Min(maximumSpeed, (speedCurve.Evaluate(i / 400f)) * tempSpeedCoef)) * animationSpeedCoef);
+
+                transform.position = temp;
                 yield return null;
             }
+            Debug.Log("Done");
+            animator.SetFloat("Speed", 0);
+            animator.SetFloat("AnimationSpeed", 0);
+            transform.LookAt(playerRef.transform);
+            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
         }
+
+        /*
 
         public static Vector3 MirrorVector(Vector3 vector, Vector3 normal)
         {
@@ -207,6 +224,7 @@ namespace PathCreation.Examples
                 yield return null;
             }
         }
+        */
 
         void moveToLocation(Vector3 ref2)
         {
