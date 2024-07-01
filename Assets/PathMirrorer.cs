@@ -26,6 +26,7 @@ namespace PathCreation.Examples
 
         public float maximumSpeed;
         public float speedCoefficient;
+        public float shimmyModifier;
 
         private float maximumPlayerDistance = 5f;
         private float currentDistance = 0f;
@@ -44,6 +45,13 @@ namespace PathCreation.Examples
         public Transform finalLocation;
         Vector3 savedCurrentPosition;
         public float tempSpeedCoef;
+        public int walkAwaySteps;
+
+        public Transform mirrorTarget;
+        public Transform mirrorOrigin;
+        Vector3 previousLocation;
+
+        public GameObject angryDebug;
 
         void Start()
         {
@@ -96,7 +104,6 @@ namespace PathCreation.Examples
                     //Start having the woman jog to meet the user
                     break;
                 case stage.APPROACH:
-                    Debug.Log(dist);
                     if (dist < distanceToTriggerAkwardShimmy)
                     {
                         Debug.Log("REACH");
@@ -109,11 +116,25 @@ namespace PathCreation.Examples
                     //The user has gotten close enough to the women to start the akward shimmy
                     if(shuffleTimer >= 0f)
                     {
-                        shuffleTimer -= Time.deltaTime;
+                        shimmy(mirrorTarget.position);
+                        transform.LookAt(playerRef.transform.position);
+                        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+                        if (GetComponent<CovidEmotionMeasurement>().getEV() < GetComponent<CovidEmotionMeasurement>().maximumEmotionValue / 2f)
+                        {
+                            shuffleTimer -= Time.deltaTime;
+                            angryDebug.SetActive(false);
+                        }
+                        else
+                        {
+                            //Make angry face
+                            angryDebug.SetActive(true);
+                        }
                     }
                     else
                     {
                         Debug.Log("END");
+                        animator.SetFloat("SideSpeed", 0);
+                        animator.SetFloat("SideAnimationSpeed", 0);
                         currentStage = stage.END;
                         savedCurrentPosition = transform.position;
                         transform.LookAt(finalLocation);
@@ -133,16 +154,32 @@ namespace PathCreation.Examples
             }
         }
 
+        void shimmy(Vector3 target)
+        {
+            Vector3 ref1 = transform.position;
+            ref1 = new Vector3(ref1.x, 0, ref1.z);
+            previousLocation = ref1;
+
+            float dist = Vector3.Distance(ref1, target);
+            Vector3 dir = (target - ref1).normalized;
+
+            float mag = Mathf.Min(dist * speedCoefficient , maximumSpeed * shimmyModifier);
+
+            transform.position += dir * mag;
+
+            animator.SetFloat("SideSpeed", mag * sideSpeedCoef);
+            animator.SetFloat("SideAnimationSpeed", mag * sideAnimationSpeedCoef);
+        }
+
         IEnumerator walkToTarget(Vector3 a, Vector3 b)
         {
-            for (int i = 0; i < 400; i++)
+            for (int i = 0; i < walkAwaySteps; i++)
             {
-                Debug.Log(i);
-                Vector3 temp = Vector3.Lerp(a, b, i / 400f * ShuffleCurve.Evaluate(i / 400f));
+                Vector3 temp = Vector3.Lerp(a, b, i / ((float)walkAwaySteps) * ShuffleCurve.Evaluate(i / ((float)walkAwaySteps)));
                 float dif = (transform.position - temp).magnitude;
 
-                animator.SetFloat("Speed", (Mathf.Min(maximumSpeed, (speedCurve.Evaluate(i / 400f)) * tempSpeedCoef)) * speedCoef);
-                animator.SetFloat("AnimationSpeed", (Mathf.Min(maximumSpeed, (speedCurve.Evaluate(i / 400f)) * tempSpeedCoef)) * animationSpeedCoef);
+                animator.SetFloat("Speed", Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * speedCoef);
+                animator.SetFloat("AnimationSpeed", Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * animationSpeedCoef);
 
                 transform.position = temp;
                 yield return null;
