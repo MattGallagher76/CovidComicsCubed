@@ -121,7 +121,10 @@ public class FollowPlayerNatural : MonoBehaviour
         }
         if(isRotationTracking)
         {
-            rotationTimer += Time.deltaTime;
+            rotationTimer += 
+                
+                
+                Time;
             float rotationMagnitude = rotDist.magnitude;
 
             //Escapes tracking sequence and sets to true target

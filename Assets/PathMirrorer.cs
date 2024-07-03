@@ -53,6 +53,8 @@ namespace PathCreation.Examples
 
         public GameObject angryDebug;
 
+        public TMPro.TextMeshPro debugText;
+
         void Start()
         {
             criticalPointReference = Instantiate(emptyPrefab);
@@ -138,12 +140,13 @@ namespace PathCreation.Examples
                         currentStage = stage.END;
                         savedCurrentPosition = transform.position;
                         transform.LookAt(finalLocation);
-                        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0); 
+                        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y - 180f, 0); 
                         StartCoroutine(walkToTarget(savedCurrentPosition, finalLocation.position));
                     }
                     break;
                 case stage.ANGER:
                     //The woman's EV is too high and it is time for her to say something
+                    //Back away
                     break;
                 case stage.END:
                     //The timer concludes and the women steps to the side
@@ -163,7 +166,9 @@ namespace PathCreation.Examples
             float dist = Vector3.Distance(ref1, target);
             Vector3 dir = (target - ref1).normalized;
 
-            float mag = Mathf.Min(dist * speedCoefficient , maximumSpeed * shimmyModifier);
+            float mag = Mathf.Min(dist * speedCoefficient , maximumSpeed * shimmyModifier) * Time.deltaTime;
+
+            debugText.text = "Cur: " + ref1 + "\nTar: " + target + "\nMag: " + mag;
 
             transform.position += dir * mag;
 
@@ -179,7 +184,7 @@ namespace PathCreation.Examples
                 float dif = (transform.position - temp).magnitude;
 
                 animator.SetFloat("Speed", Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * speedCoef);
-                animator.SetFloat("AnimationSpeed", Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * animationSpeedCoef);
+                animator.SetFloat("AnimationSpeed", -1 * Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * animationSpeedCoef);
 
                 transform.position = temp;
                 yield return null;
@@ -274,7 +279,7 @@ namespace PathCreation.Examples
 
             float target = pathCreator.path.length * criticalPointOffset;
 
-            currentDistance += (Mathf.Min(maximumSpeed, (target - currentDistance) * speedCoefficient));
+            currentDistance += (Mathf.Min(maximumSpeed, (target - currentDistance) * speedCoefficient)) * Time.deltaTime;
 
             if (pathCreator != null && follow)
             {
