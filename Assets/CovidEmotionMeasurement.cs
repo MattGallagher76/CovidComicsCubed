@@ -14,6 +14,7 @@ public class CovidEmotionMeasurement : MonoBehaviour
     private float emotionValue = 0;
     private float distance = 2; //6 feet
     public Renderer r;
+    public TMPro.TextMeshPro textBox;
 
     [Range(0, 1f)]
     public float alpha;
@@ -43,7 +44,18 @@ public class CovidEmotionMeasurement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(emotionValue <= maximumEmotionValue / 3f)
+        {
+            textBox.text = "";
+        }
+        else if(emotionValue <= maximumEmotionValue * 2 / 3f)
+        {
+            textBox.text = "?";
+        }
+        else
+        {
+            textBox.text = "!";
+        }
     }
 
     public Color spectrum()

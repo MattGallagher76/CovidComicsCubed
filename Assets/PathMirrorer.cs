@@ -49,6 +49,7 @@ namespace PathCreation.Examples
 
         public Transform mirrorTarget;
         public Transform mirrorOrigin;
+        public Transform LeftRef;
         Vector3 previousLocation;
 
         public GameObject angryDebug;
@@ -124,12 +125,12 @@ namespace PathCreation.Examples
                         if (GetComponent<CovidEmotionMeasurement>().getEV() < GetComponent<CovidEmotionMeasurement>().maximumEmotionValue / 2f)
                         {
                             shuffleTimer -= Time.deltaTime;
-                            angryDebug.SetActive(false);
+                            //angryDebug.SetActive(false);
                         }
                         else
                         {
                             //Make angry face
-                            angryDebug.SetActive(true);
+                            //angryDebug.SetActive(true);
                         }
                     }
                     else
@@ -168,12 +169,23 @@ namespace PathCreation.Examples
 
             float mag = Mathf.Min(dist * speedCoefficient , maximumSpeed * shimmyModifier) * Time.deltaTime;
 
+            float distanceToLeftRef = Vector3.Distance(ref1, LeftRef.position);
+            float newDistanceToLeftRef = Vector3.Distance(ref1 + dir * mag, LeftRef.position);
+
+            if (distanceToLeftRef > newDistanceToLeftRef)
+            {
+                animator.SetFloat("SideSpeed", mag * sideSpeedCoef);
+                animator.SetFloat("SideAnimationSpeed", mag * sideAnimationSpeedCoef);
+            }
+            else
+            {
+                animator.SetFloat("SideSpeed", -1 * mag * sideSpeedCoef);
+                animator.SetFloat("SideAnimationSpeed", -1 * mag * sideAnimationSpeedCoef);
+            }
+
             debugText.text = "Cur: " + ref1 + "\nTar: " + target + "\nMag: " + mag;
 
             transform.position += dir * mag;
-
-            animator.SetFloat("SideSpeed", mag * sideSpeedCoef);
-            animator.SetFloat("SideAnimationSpeed", mag * sideAnimationSpeedCoef);
         }
 
         IEnumerator walkToTarget(Vector3 a, Vector3 b)
