@@ -46,15 +46,18 @@ namespace PathCreation.Examples
         Vector3 savedCurrentPosition;
         public float tempSpeedCoef;
         public int walkAwaySteps;
+        public float walkAwayTime;
 
         public Transform mirrorTarget;
         public Transform mirrorOrigin;
         public Transform LeftRef;
-        Vector3 previousLocation;
+        public Transform ForwRef;
 
         public GameObject angryDebug;
 
         public TMPro.TextMeshPro debugText;
+
+        public float shimmyThreshold;
 
         void Start()
         {
@@ -142,7 +145,7 @@ namespace PathCreation.Examples
                         savedCurrentPosition = transform.position;
                         transform.LookAt(finalLocation);
                         transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y - 180f, 0); 
-                        StartCoroutine(walkToTarget(savedCurrentPosition, finalLocation.position));
+                        StartCoroutine(walkToTargetDT(savedCurrentPosition, finalLocation.position));
                     }
                     break;
                 case stage.ANGER:
@@ -162,15 +165,23 @@ namespace PathCreation.Examples
         {
             Vector3 ref1 = transform.position;
             ref1 = new Vector3(ref1.x, 0, ref1.z);
-            previousLocation = ref1;
-
+            
             float dist = Vector3.Distance(ref1, target);
+
+            if(dist < shimmyThreshold)
+            {
+                animator.SetFloat("SideSpeed", 0);
+                animator.SetFloat("SideAnimationSpeed", 0);
+                return;
+            }
+
             Vector3 dir = (target - ref1).normalized;
 
             float mag = Mathf.Min(dist * speedCoefficient , maximumSpeed * shimmyModifier) * Time.deltaTime;
 
             float distanceToLeftRef = Vector3.Distance(ref1, LeftRef.position);
             float newDistanceToLeftRef = Vector3.Distance(ref1 + dir * mag, LeftRef.position);
+            Debug.Log(Vector3.Angle(LeftRef.position - ref1, dir * mag));
 
             if (distanceToLeftRef > newDistanceToLeftRef)
             {
@@ -180,7 +191,7 @@ namespace PathCreation.Examples
             else
             {
                 animator.SetFloat("SideSpeed", -1 * mag * sideSpeedCoef);
-                animator.SetFloat("SideAnimationSpeed", -1 * mag * sideAnimationSpeedCoef);
+                animator.SetFloat("SideAnimationSpeed", mag * sideAnimationSpeedCoef);
             }
 
             debugText.text = "Cur: " + ref1 + "\nTar: " + target + "\nMag: " + mag;
@@ -193,6 +204,26 @@ namespace PathCreation.Examples
             for (int i = 0; i < walkAwaySteps; i++)
             {
                 Vector3 temp = Vector3.Lerp(a, b, i / ((float)walkAwaySteps) * ShuffleCurve.Evaluate(i / ((float)walkAwaySteps)));
+                float dif = (transform.position - temp).magnitude;
+
+                animator.SetFloat("Speed", Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * speedCoef);
+                animator.SetFloat("AnimationSpeed", -1 * Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * animationSpeedCoef);
+
+                transform.position = temp;
+                yield return null;
+            }
+            Debug.Log("Done");
+            animator.SetFloat("Speed", 0);
+            animator.SetFloat("AnimationSpeed", 0);
+            transform.LookAt(playerRef.transform);
+            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
+        }
+
+        IEnumerator walkToTargetDT(Vector3 a, Vector3 b)
+        {
+            for(float t = 0; t < walkAwayTime; t += Time.deltaTime)
+            {
+                Vector3 temp = Vector3.Lerp(a, b, t / walkAwayTime * ShuffleCurve.Evaluate(t / walkAwayTime));
                 float dif = (transform.position - temp).magnitude;
 
                 animator.SetFloat("Speed", Mathf.Min(maximumSpeed, temp.magnitude * tempSpeedCoef) * speedCoef);

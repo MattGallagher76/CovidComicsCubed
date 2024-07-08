@@ -488,9 +488,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 759238435992479818, guid: 4b0519f6e28f4fd4d8717b86cbf8c430, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087696525404593583, guid: 4b0519f6e28f4fd4d8717b86cbf8c430, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4805012347054437967, guid: 4b0519f6e28f4fd4d8717b86cbf8c430, type: 3}
       propertyPath: m_Name
       value: Pastel_Tree (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4805012347054437967, guid: 4b0519f6e28f4fd4d8717b86cbf8c430, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5151858908205626308, guid: 4b0519f6e28f4fd4d8717b86cbf8c430, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1490,7 +1502,7 @@ MonoBehaviour:
   speedCoef: 1
   animationSpeedCoef: 0.8
   sideSpeedCoef: 100
-  sideAnimationSpeedCoef: 100
+  sideAnimationSpeedCoef: 50
   animator: {fileID: 339763185}
   follow: 1
   playerRef: {fileID: 1544934446}
@@ -1572,11 +1584,14 @@ MonoBehaviour:
   finalLocation: {fileID: 1617535880}
   tempSpeedCoef: 2
   walkAwaySteps: 600
+  walkAwayTime: 3
   mirrorTarget: {fileID: 1018814586}
   mirrorOrigin: {fileID: 2048058552}
   LeftRef: {fileID: 1619634294}
+  ForwRef: {fileID: 0}
   angryDebug: {fileID: 955369455}
   debugText: {fileID: 608638429}
+  shimmyThreshold: 0.1
 --- !u!114 &339763189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1642,7 +1657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &351713308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6725,7 +6740,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.833}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1765904604
@@ -7768,7 +7783,7 @@ Transform:
   m_GameObject: {fileID: 1877583615}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.833, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
