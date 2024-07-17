@@ -4,35 +4,37 @@ using UnityEngine;
 
 public class DataSetSelector : MonoBehaviour
 {
-    public List<float> testDataSet;
+    public string countryName;
+    public List<graphValue> testDataSet;
+
+    //For graph, plot all points on a spline with no shown points or lines,
+    //Then have an invisable object move accross the spline with a line being generated behind it
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        testDataSet = new List<graphValue>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void addValue(float x, float y)
     {
-        
+        testDataSet.Add(new graphValue(x, y));
     }
 
-    private void ProcessCSV(string csvData)
+    public List<graphValue> getList()
     {
-        string[] lines = csvData.Split('\n');
+        return testDataSet;
+    }
 
-        foreach (string line in lines)
+    public class graphValue
+    {
+        float cases;            //Y
+        float timeSinceStart;   //X
+
+        public graphValue(float x, float y)
         {
-            if (string.IsNullOrWhiteSpace(line)) continue; // Skip empty lines
-
-            string[] fields = line.Split(',');
-            // Process each field here
-            // Example: Print fields to the console
-            foreach (string field in fields)
-            {
-                testDataSet.Add(float.Parse(line));
-            }
+            cases = y;
+            timeSinceStart = x;
         }
     }
 }
