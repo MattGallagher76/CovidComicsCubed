@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1530196962630137637}
   - component: {fileID: 2880080333288445415}
   - component: {fileID: 7157261466405404411}
+  - component: {fileID: 1440173027451799093}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -28,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 4226698452135908441}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.446, y: 0, z: 0}
-  m_LocalScale: {x: 0.26577, y: 0.26577, z: 0.26577}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -97,3 +98,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countryName: 
+  graphPoint: {fileID: 3392091940375661442, guid: 23a06eed2ed68a64eb9bc802939f8ccb, type: 3}
+  handTag: hand
+  offset: {x: 1, y: 1, z: 0}
+  graph: 0
+  xScale: 0.001
+  yScale: 0.0003
+  dm: {fileID: 0}
+--- !u!65 &1440173027451799093
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226698452135908441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.2, y: 1.2, z: 1.2}
+  m_Center: {x: 0, y: 0, z: 0}
