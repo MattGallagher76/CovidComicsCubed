@@ -3610,8 +3610,8 @@ MonoBehaviour:
   data: {fileID: 4900000, guid: bb81f48e2eeeb754a868899077227050, type: 3}
   dssPrefab: {fileID: 4226698452135908441, guid: 2ed3ed7942b84eb49a5432738e108604, type: 3}
   emptyPrefab: {fileID: 564616044403225686, guid: d631d4d7290c39e49a7fe70c723bdd64, type: 3}
-  xSize: 15
-  distScale: 0.15
+  xSize: 30
+  distScale: 0.25
   currentGraph: {fileID: 0}
 --- !u!114 &847483733
 MonoBehaviour:

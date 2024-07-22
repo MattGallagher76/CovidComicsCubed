@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 2880080333288445415}
   - component: {fileID: 7157261466405404411}
   - component: {fileID: 1440173027451799093}
+  - component: {fileID: -5524608758855298784}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Data Set Selector Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,12 +99,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countryName: 
-  graphPoint: {fileID: 3392091940375661442, guid: 23a06eed2ed68a64eb9bc802939f8ccb, type: 3}
-  handTag: hand
+  graphLine: {fileID: 2076134559031202331, guid: abc01a866fc82ce47b0a5d5575298477, type: 3}
+  handTag: HandSphere
   offset: {x: 1, y: 1, z: 0}
   graph: 0
-  xScale: 0.001
-  yScale: 0.0003
+  xScale: 0.002
+  yScale: 0.0005
   dm: {fileID: 0}
 --- !u!65 &1440173027451799093
 BoxCollider:
@@ -126,3 +127,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1.2, z: 1.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &-5524608758855298784
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226698452135908441}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
