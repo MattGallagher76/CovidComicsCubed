@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 224e24826149acb429be6db0d0acf5b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
   handTag: HandSphere
   offset: {x: 1, y: 1, z: 0}
   graph: 0
-  xScale: 0.002
+  xScale: -0.12
   yScale: 0.0005
   dm: {fileID: 0}
 --- !u!65 &1440173027451799093

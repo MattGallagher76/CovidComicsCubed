@@ -10,8 +10,6 @@ public class DataSetSelector : MonoBehaviour
     public string countryName;
     public List<graphValue> testDataSet;
     public GameObject graphLine;
-    LineRenderer lr;
-    GameObject localGraphLine;
     public string handTag;
 
     public Vector3 offset;
@@ -20,20 +18,14 @@ public class DataSetSelector : MonoBehaviour
     public float yScale;
 
     public dataManager dm;
+    public static globeSpinTest gst;
 
     List<Vector3> graphPoints = new List<Vector3>();
 
+    public bool isOnGlobe;
+
     //For graph, plot all points on a spline with no shown points or lines,
     //Then have an invisable object move accross the spline with a line being generated behind it
-
-    public void Update()
-    {
-        if(graph)
-        {
-            graph = false;
-            graphData();
-        }
-    }
 
     public void addValue(float x, float y)
     {
@@ -52,8 +44,6 @@ public class DataSetSelector : MonoBehaviour
     public void graphData()
     {
         dm.graph(this);
-        localGraphLine = Instantiate(graphLine);
-        lr = localGraphLine.GetComponent<LineRenderer>();
         foreach(graphValue gv in testDataSet)
         {
             /*
@@ -68,29 +58,46 @@ public class DataSetSelector : MonoBehaviour
         }
 
         //buba
-
-        lr.positionCount = graphPoints.Count;
-        int i = 0;
-        foreach(Vector3 v in graphPoints)
-        {
-            Debug.Log("I: " + i + ", V: " + v);
-            lr.SetPosition(i, v);
-            i++;
-        }
+        //FindObjectOfType<WindowGraph>().ShowGraph()
+        GetComponent<Renderer>().material.color = Color.red;
     }
 
     public void clearGraph()
     {
-        Destroy(localGraphLine);
+        FindObjectOfType<WindowGraph>().clearGraph();
+        GetComponent<Renderer>().material.color = Color.white;
+    }
+
+    public void Update()
+    {
+        if (graph)
+        {
+            graph = false;
+            graphData();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-        if (other.gameObject.CompareTag(handTag))
+        Debug.Log("Entered dss");
+        if (isOnGlobe)
         {
-            graphData();
+            gst = FindObjectOfType<globeSpinTest>();
+            gst.updateDss(this);
         }
+        else
+        {
+            Debug.Log(other.gameObject.name);
+            if (other.gameObject.CompareTag(handTag))
+            {
+                graphData();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        gst.dssColliderExited();
     }
 
     public class graphValue
