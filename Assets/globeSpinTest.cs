@@ -110,13 +110,13 @@ public class globeSpinTest : MonoBehaviour
             int handID = other.gameObject.GetInstanceID();
             Vector3 currentHandPosition = other.transform.position;
 
-            if(!isSwipe && Vector3.Distance(enteredPosition, currentHandPosition) > minimumDistanceToSwipe)
+            /*if(!isSwipe && Vector3.Distance(enteredPosition, currentHandPosition) > minimumDistanceToSwipe)
             {
                 //If the distance is exceeded, just immeditely start swipe
                 timer = 0f;
                 isSwipe = true;
                 Debug.Log("Distance based Swipe Start");
-            }
+            }*/
 
             if (isSwipe)
             {

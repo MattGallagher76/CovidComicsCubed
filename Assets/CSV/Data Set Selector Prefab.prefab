@@ -101,11 +101,12 @@ MonoBehaviour:
   countryName: 
   graphLine: {fileID: 2076134559031202331, guid: abc01a866fc82ce47b0a5d5575298477, type: 3}
   handTag: HandSphere
-  offset: {x: 1, y: 1, z: 0}
+  offset: {x: -1, y: 1, z: 0}
   graph: 0
-  xScale: -0.12
-  yScale: 0.0005
+  xScale: 0.0002
+  yScale: 0.00001
   dm: {fileID: 0}
+  isOnGlobe: 0
 --- !u!65 &1440173027451799093
 BoxCollider:
   m_ObjectHideFlags: 0

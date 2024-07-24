@@ -10,6 +10,8 @@ public class DataSetSelector : MonoBehaviour
     public string countryName;
     public List<graphValue> testDataSet;
     public GameObject graphLine;
+    LineRenderer lr;
+    GameObject localGraphLine;
     public string handTag;
 
     public Vector3 offset;
@@ -44,7 +46,9 @@ public class DataSetSelector : MonoBehaviour
     public void graphData()
     {
         dm.graph(this);
-        foreach(graphValue gv in testDataSet)
+        localGraphLine = Instantiate(graphLine);
+        lr = localGraphLine.GetComponent<LineRenderer>();
+        foreach (graphValue gv in testDataSet)
         {
             /*
             GameObject t = Instantiate(graphPoint);
@@ -53,18 +57,29 @@ public class DataSetSelector : MonoBehaviour
             t.transform.localPosition = new Vector3(gv.getTimeSinceStart() * xScale, gv.getCases() * yScale, 0) + offset;
             */
 
-            Vector3 t = this.transform.parent.localPosition + new Vector3(gv.getTimeSinceStart() * xScale, gv.getCases() * yScale, 0) + offset;
+            Vector3 t = this.transform.parent.localPosition + new Vector3(0, gv.getCases() * yScale, gv.getTimeSinceStart() * xScale) + offset;
             graphPoints.Add(t);
         }
 
         //buba
+
+        lr.positionCount = graphPoints.Count;
+        int i = 0;
+        foreach (Vector3 v in graphPoints)
+        {
+            Debug.Log("I: " + i + ", V: " + v);
+            lr.SetPosition(i, v);
+            i++;
+        }
+
         //FindObjectOfType<WindowGraph>().ShowGraph()
         GetComponent<Renderer>().material.color = Color.red;
     }
 
     public void clearGraph()
     {
-        FindObjectOfType<WindowGraph>().clearGraph();
+        Destroy(localGraphLine);
+        //FindObjectOfType<WindowGraph>().clearGraph();
         GetComponent<Renderer>().material.color = Color.white;
     }
 
