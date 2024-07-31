@@ -36,6 +36,25 @@ public class dataManager : MonoBehaviour
 
         ProcessCSV(data.text);
         em.transform.parent = null;
+        /*
+        float highestPercentage = 0f;
+        string nameOf = "";
+        foreach(KeyValuePair<string, DataSetSelector> kv in dict)
+        {
+            if(kv.Value != null)
+            {
+                DataSetSelector dss = kv.Value;
+                float h = dss.highestPercentage();
+                Debug.Log(kv.Key + ", " + h);
+                if(h > highestPercentage)
+                {
+                    nameOf = kv.Key;
+                    highestPercentage = h;
+                }
+            }
+        }
+        Debug.Log("The highest percentage is: " + highestPercentage + " from " + nameOf);
+    */
     }
 
     // Update is called once per frame
@@ -98,8 +117,6 @@ public class dataManager : MonoBehaviour
                     try
                     {
                         dss.addValue(float.Parse(fields[2]), float.Parse(fields[1]));
-                        if (fields[0].ToLower().Equals("canada") && float.Parse(fields[1]) > 700 && float.Parse(fields[1]) < 800)
-                            Debug.Log(fields[1] + ", " + fields[2]);
                     }
                     catch (Exception e)
                     {

@@ -24,7 +24,6 @@ public class globeSpinTest : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Debug.Log("SpinGlobe script started");
     }
 
     public void updateDss(DataSetSelector dss)
@@ -34,11 +33,11 @@ public class globeSpinTest : MonoBehaviour
 
     public void dssColliderExited()
     {
-        Debug.Log("Exited dss - Timer: " + timer);
+        //Debug.Log("Exited dss - Timer: " + timer);
         if(timer > 0)
         {
             //Tap
-            Debug.Log("Tapped: " + currentDss.countryName);
+            //Debug.Log("Tapped: " + currentDss.countryName);
             currentDss.graphData();
             timer = 0f;
             isInside = false;   //Forces the hand to leave before trying to spin a gain
@@ -47,7 +46,8 @@ public class globeSpinTest : MonoBehaviour
 
     private void Update()
     {
-        if(timer > 0)
+
+        if (timer > 0)
         {
             timer -= Time.deltaTime;
         }
@@ -56,13 +56,14 @@ public class globeSpinTest : MonoBehaviour
             if (isInside)
             {
                 isSwipe = true;
-                Debug.Log("Timer based Swipe Start");
+                //Debug.Log("Timer based Swipe Start");
             }
         }
+        /*
         if(transform.localEulerAngles.x != 0 || transform.localEulerAngles.z != 0)
         {
             transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, 0f);
-        }
+        }*/
     }
 
     void OnTriggerEnter(Collider other)
@@ -77,7 +78,7 @@ public class globeSpinTest : MonoBehaviour
             {
                 handPositions.Add(handID, other.transform.position);
                 lastHandPositions.Add(handID, other.transform.position);
-                Debug.Log("Hand entered trigger. Position: " + other.transform.position);
+                //Debug.Log("Hand entered trigger. Position: " + other.transform.position);
             }
         }
     }
@@ -102,7 +103,7 @@ public class globeSpinTest : MonoBehaviour
             {
                 handPositions.Remove(handID);
                 lastHandPositions.Remove(handID);
-                Debug.Log("Hand exited trigger.");
+                //Debug.Log("Hand exited trigger.");
             }
         }
     }
@@ -114,14 +115,14 @@ public class globeSpinTest : MonoBehaviour
             int handID = other.gameObject.GetInstanceID();
             Vector3 currentHandPosition = other.transform.position;
 
-            Debug.Log(Vector3.Distance(enteredPosition, currentHandPosition));
+            //Debug.Log(Vector3.Distance(enteredPosition, currentHandPosition));
 
             if(!isSwipe && Vector3.Distance(enteredPosition, currentHandPosition) > minimumDistanceToSwipe)
             {
                 //If the distance is exceeded, just immeditely start swipe
                 timer = 0f;
                 isSwipe = true;
-                Debug.Log("Distance based Swipe Start");
+                //Debug.Log("Distance based Swipe Start");
             }
 
             if (isSwipe)
@@ -131,12 +132,14 @@ public class globeSpinTest : MonoBehaviour
                 {
                     Vector3 lastPosition = lastHandPositions[handID];
                     Vector3 direction = currentHandPosition - lastPosition;
+                    direction = new Vector3(0, 0, direction.z);
 
                     // Calculate the torque based on the hand movement
-                    Vector3 torque = Vector3.Cross(direction, Vector3.up) * spinSpeed / handPositions.Count;
-                    rb.AddTorque(-torque, ForceMode.VelocityChange); // Apply negative torque to reverse the direction
+                    Vector3 torque = Vector3.Cross(direction, Vector3.right) * spinSpeed / handPositions.Count;
+                    //torque = new Vector3(0f, torque.y, 0f);
+                    rb.AddTorque(torque, ForceMode.VelocityChange); // Apply negative torque to reverse the direction
 
-                    //Debug.Log("Hand staying in trigger. Applying torque: " + -torque);
+                    Debug.Log(torque);
 
                     // Update the hand positions
                     lastHandPositions[handID] = currentHandPosition;

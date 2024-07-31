@@ -46,6 +46,19 @@ public class DataSetSelector : MonoBehaviour
         return testDataSet;
     }
 
+    public float highestPercentage()
+    {
+        float highest = 0f;
+        foreach(graphValue gv in testDataSet)
+        {
+            if(gv.getCases() / population > highest)
+            {
+                highest = gv.getCases() / population;
+            }
+        }
+        return highest;
+    }
+
     public void graphData()
     {
         dm.graph(this);
