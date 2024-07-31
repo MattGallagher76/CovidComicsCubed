@@ -26,10 +26,10 @@ public class tempDss : MonoBehaviour
         {
             if (!done)
             {
-                Debug.Log("Data mirrored");
+                //Debug.Log("Data mirrored");
                 DataSetSelector dss = GetComponent<DataSetSelector>();
                 dataManager dm = FindObjectOfType<dataManager>();
-                dm.dict.TryGetValue(countryName, out DataSetSelector dss2);
+                dm.dict.TryGetValue(countryName.ToLower(), out DataSetSelector dss2);
                 dss.testDataSet = dss2.testDataSet;
                 done = true;
             }

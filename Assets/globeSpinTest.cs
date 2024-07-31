@@ -59,6 +59,10 @@ public class globeSpinTest : MonoBehaviour
                 Debug.Log("Timer based Swipe Start");
             }
         }
+        if(transform.localEulerAngles.x != 0 || transform.localEulerAngles.z != 0)
+        {
+            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, 0f);
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -110,13 +114,15 @@ public class globeSpinTest : MonoBehaviour
             int handID = other.gameObject.GetInstanceID();
             Vector3 currentHandPosition = other.transform.position;
 
-            /*if(!isSwipe && Vector3.Distance(enteredPosition, currentHandPosition) > minimumDistanceToSwipe)
+            Debug.Log(Vector3.Distance(enteredPosition, currentHandPosition));
+
+            if(!isSwipe && Vector3.Distance(enteredPosition, currentHandPosition) > minimumDistanceToSwipe)
             {
                 //If the distance is exceeded, just immeditely start swipe
                 timer = 0f;
                 isSwipe = true;
                 Debug.Log("Distance based Swipe Start");
-            }*/
+            }
 
             if (isSwipe)
             {
