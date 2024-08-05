@@ -155,19 +155,17 @@ public class WindowGraph : MonoBehaviour
 
         GameObject lastCircleGameObject = null;
 
-        int i = 0;
-        for(float timer = 0f; timer < 10f && i <= xVal.Count - 1; timer += Time.deltaTime)
+        for(int i = 0; i < xVal.Count * 2; i ++)
         {
-            //Debug.Log(xVal[i] + ", " + yVal[i]);
-            Debug.Log(i);
-            float xPos = (xVal[i]) * graphWidth;
-            float yPos = (yVal[i]) * graphHeight * yMultiplier;
-            GameObject circleGameObject = CreateCircle(new Vector2(xPos, yPos));
-            if (lastCircleGameObject != null)
-                CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
-            lastCircleGameObject = circleGameObject;
-
-            i++;
+            if(i % 2 == 0)
+            {
+                float xPos = (xVal[i/2]) * graphWidth;
+                float yPos = (yVal[i/2]) * graphHeight * yMultiplier;
+                GameObject circleGameObject = CreateCircle(new Vector2(xPos, yPos));
+                if (lastCircleGameObject != null)
+                    CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
+                lastCircleGameObject = circleGameObject;
+            }
             yield return null;
         }
     }

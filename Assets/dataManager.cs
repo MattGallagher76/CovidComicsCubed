@@ -70,7 +70,7 @@ public class dataManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("The latest date is: " + latestDate + " from " + nameOf2);
+        //Debug.Log("The latest date is: " + latestDate + " from " + nameOf2);
 
         cleanUpDSS();
     }
@@ -168,7 +168,7 @@ public class dataManager : MonoBehaviour
                     DataSetSelector dss = go.GetComponent<DataSetSelector>();
                     dss.handRefernce = handReference;
                     go.transform.parent = em.transform;
-                    go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 0.5f, count % xSize * distScale);
+                    go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 1f, count % xSize * distScale);
                     dss.setName(fields[0].ToLower());
                     populationDict.TryGetValue(fields[0].ToLower(), out int pop);
                     dss.population = pop;

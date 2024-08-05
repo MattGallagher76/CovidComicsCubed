@@ -11,12 +11,14 @@ public class CoughManager : MonoBehaviour
     public float intensity;
     public float threshold;
 
-    public float minPitch = 0.8f; // Minimum pitch value
-    public float maxPitch = 1.2f; // Maximum pitch value
-    public float minVolume = 0.5f; // Minimum volume value
-    public float maxVolume = 1.0f; // Maximum volume value
+    public float minPitch = 0.9f; // Minimum pitch value
+    public float maxPitch = 1.1f; // Maximum pitch value
+    public float minVolume = 0.1f; // Minimum volume value
+    public float maxVolume = 0.4f; // Maximum volume value
 
     public GameObject audioSourcePrefab;
+
+    public AnimationCurve ac;
 
     public void PlayCoughs(float intensity)
     {
@@ -47,17 +49,19 @@ public class CoughManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float r = Random.Range(intensity, 2 * intensity);
-        Debug.Log(r);
-        if (r > threshold)
+        float r = Random.Range(0, 0.99f);
+        //Debug.Log(r);
+        if (r > ac.Evaluate(intensity))
         {
             GameObject gb = Instantiate(audioSourcePrefab);
-            gb.transform.position = new Vector3(0, 1, 0);
+            gb.transform.position = new Vector3(Random.Range(-3f, 3f), Random.Range(1f, 2f), Random.Range(-3f, 3f));
 
             gb.GetComponent<AudioSource>().pitch = Random.Range(minPitch, maxPitch);
             gb.GetComponent<AudioSource>().volume = Random.Range(minVolume, maxVolume) * intensity;
 
-            gb.GetComponent<AudioSource>().PlayOneShot(coughClips[Random.Range(0, coughClips.Count)]);
+            AudioClip aud = coughClips[Random.Range(0, coughClips.Count)];
+            gb.GetComponent<AudioSource>().PlayOneShot(aud);
+            Destroy(gb, aud.length);
         }
     }
 }
