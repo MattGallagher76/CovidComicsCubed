@@ -2,10 +2,12 @@ using Oculus.Interaction;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using static DataSetSelector;
 
 public class DataSetSelector : MonoBehaviour
 {
@@ -38,7 +40,55 @@ public class DataSetSelector : MonoBehaviour
             dm = FindObjectOfType<dataManager>();
         if (testDataSet == null)
             testDataSet = new List<graphValue>();
-        testDataSet.Add(new graphValue(x, y));
+        if (population <= 0)
+            Debug.LogError("Population of " + countryName + " is not set");
+        testDataSet.Add(new graphValue(x, y / population));
+    }
+
+    public void GenerateCompleteGraph()
+    {
+        if(countryName.Equals("bulgaria"))
+            Debug.Log("Before: " + testDataSet.Count);
+        List<graphValue> graphValues = testDataSet;
+        if (graphValues == null || graphValues.Count == 0)
+            return;
+
+        // Sort the list by X values
+        graphValues = graphValues.OrderBy(gv => gv.getTimeSinceStart()).ToList();
+
+        List<graphValue> completeGraph = new List<graphValue>();
+
+        for (int i = 0; i < graphValues.Count - 1; i++)
+        {
+            graphValue current = graphValues[i];
+            graphValue next = graphValues[i + 1];
+
+            completeGraph.Add(current);
+
+            float currentTime = current.getTimeSinceStart();
+            float nextTime = next.getTimeSinceStart();
+
+            // Fill in the missing points between current and next
+            for (float time = currentTime + 1; time < nextTime; time++)
+            {
+                float interpolatedCases = Interpolate(currentTime, nextTime, current.getCases(), next.getCases(), time);
+                graphValue interpolatedValue = new graphValue(time, interpolatedCases);
+                completeGraph.Add(interpolatedValue);
+            }
+        }
+
+        // Add the last element
+        completeGraph.Add(graphValues.Last());
+
+        testDataSet = completeGraph;
+        if(countryName.Equals("bulgaria"))
+            Debug.Log("After: " + testDataSet.Count);
+    }
+
+    private static float Interpolate(float x1, float x2, float y1, float y2, float x)
+    {
+        // Linear interpolation formula
+        return y1 + ((y2 - y1) / (x2 - x1)) * (x - x1);
     }
 
     public List<graphValue> getList()
@@ -54,6 +104,19 @@ public class DataSetSelector : MonoBehaviour
             if(gv.getCases() / population > highest)
             {
                 highest = gv.getCases() / population;
+            }
+        }
+        return highest;
+    }
+
+    public float latestDate()
+    {
+        float highest = 0f;
+        foreach (graphValue gv in testDataSet)
+        {
+            if (gv.getTimeSinceStart() > highest)
+            {
+                highest = gv.getTimeSinceStart();
             }
         }
         return highest;
@@ -88,43 +151,15 @@ public class DataSetSelector : MonoBehaviour
         }
         */
 
+        Debug.Log("About to graph " + testDataSet.Count + " points");
+
         List<float> graphValuesX = new List<float>();
         List<float> graphValuesY = new List<float>();
 
-        float maxY = -1f;
-        float maxX = -1f;
-        List<graphValue> removedValues = new List<graphValue>();
-
-        foreach (graphValue gv in testDataSet)
+        foreach(graphValue gv in testDataSet)
         {
-            //Debug.Log("X: " + gv.getTimeSinceStart() + ", Y: " + gv.getCases());
-        }
-
-        while (testDataSet.Count != 0) {
-            float smallestVal = testDataSet[0].getTimeSinceStart();
-            int index = 0;
-            for (int y = 0; y < testDataSet.Count; y++)
-            {
-                if (testDataSet[y].getTimeSinceStart() < smallestVal)
-                {
-                    index = y;
-                    smallestVal = testDataSet[y].getTimeSinceStart();
-                }
-            }
-            if (testDataSet[index].getCases() > maxY)
-                maxY = testDataSet[index].getCases();
-            if (testDataSet[index].getTimeSinceStart() > maxX)
-                maxX = testDataSet[index].getTimeSinceStart();
-            removedValues.Add(testDataSet[index]);
-            testDataSet.RemoveAt(index);
-        }
-        //Now we have a sorted list named removedValues
-        foreach(graphValue gv in removedValues)
-        {
-            //Debug.Log("X: " + gv.getTimeSinceStart() / maxX + ", Y: " + gv.getCases() / maxY);
-            //Debug.Log("X: " + gv.getTimeSinceStart() + ", Y: " + gv.getCases());
-            graphValuesX.Add(gv.getTimeSinceStart() / maxX);
-            graphValuesY.Add(gv.getCases() / maxY);
+            graphValuesX.Add(gv.getTimeSinceStart() / (4 * 365));
+            graphValuesY.Add(gv.getCases());
         }
 
         FindObjectOfType<WindowGraph>().ShowGraph(graphValuesX, graphValuesY);
