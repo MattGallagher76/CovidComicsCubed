@@ -5,9 +5,7 @@ using UnityEngine;
 public class CoughManager : MonoBehaviour
 {
     public List<AudioClip> coughClips; // List of cough audio clips
-    public AudioSource audioSource; // Audio source to play the coughs
-
-    [Range(0, 1)]
+    
     public float intensity;
     public float threshold;
 
@@ -19,26 +17,7 @@ public class CoughManager : MonoBehaviour
     public GameObject audioSourcePrefab;
 
     public AnimationCurve ac;
-
-    public void PlayCoughs(float intensity)
-    {
-        // Ensure intensity is clamped between 0 and 1
-        intensity = Mathf.Clamp01(intensity);
-
-        // Determine the number of coughs to play based on intensity
-        int numberOfCoughs = Mathf.CeilToInt(intensity * coughClips.Count);
-
-        audioSource.pitch = Random.Range(minPitch, maxPitch);
-        audioSource.volume = Random.Range(minVolume, maxVolume) * intensity;
-
-        // Play the determined number of cough clips
-        for (int i = 0; i < numberOfCoughs; i++)
-        {
-            // Select a random cough clip
-            int randomIndex = Random.Range(0, coughClips.Count);
-            audioSource.PlayOneShot(coughClips[randomIndex]);
-        }
-    }
+    private float maxIntensity = 0.001479077f;
 
     // Start is called before the first frame update
     void Start()
@@ -49,10 +28,11 @@ public class CoughManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float r = Random.Range(0, 0.99f);
+        float r = Random.Range(0, 1f);
         //Debug.Log(r);
-        if (r > ac.Evaluate(intensity))
+        if (r > ac.Evaluate(intensity) && intensity != 0)
         {
+            //Debug.Log("Playing Cough - I:" + intensity + ", R:" + r);
             GameObject gb = Instantiate(audioSourcePrefab);
             gb.transform.position = new Vector3(Random.Range(-3f, 3f), Random.Range(1f, 2f), Random.Range(-3f, 3f));
 
@@ -63,5 +43,14 @@ public class CoughManager : MonoBehaviour
             gb.GetComponent<AudioSource>().PlayOneShot(aud);
             Destroy(gb, aud.length);
         }
+        //else
+            //Debug.Log("I: " + intensity + ", R: " + r);
+    }
+
+    public void setIntensity(float val)
+    {
+        if (val > 1 || val < 0)
+            Debug.LogError("Intensity out of bounds");
+        intensity = val / maxIntensity;
     }
 }

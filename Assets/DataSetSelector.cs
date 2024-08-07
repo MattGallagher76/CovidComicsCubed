@@ -162,7 +162,7 @@ public class DataSetSelector : MonoBehaviour
             graphValuesY.Add(gv.getCases());
         }
 
-        FindObjectOfType<WindowGraph>().ShowGraph(graphValuesX, graphValuesY);
+        FindObjectOfType<WindowGraph>().ShowGraph(graphValuesX, graphValuesY, countryName);
         GetComponent<Renderer>().material.color = Color.red;
     }
 

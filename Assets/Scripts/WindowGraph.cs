@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ public class WindowGraph : MonoBehaviour
     [SerializeField] private float yMultiplier;
 
     [SerializeField] private GameObject datePrefab;
+    [SerializeField] private CoughManager cm;
+    [SerializeField] private TMPro.TextMeshPro countrySlot;
 
     /**
      * Must me a exponential of 2
@@ -127,7 +130,7 @@ public class WindowGraph : MonoBehaviour
         return gameObject;
     }
 
-    public void ShowGraph(List<float> xVal, List<float> yVal)
+    public void ShowGraph(List<float> xVal, List<float> yVal, string str)
     {
         /*
         float graphHeight = graphContainer.sizeDelta.y;
@@ -144,6 +147,7 @@ public class WindowGraph : MonoBehaviour
                 CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
             lastCircleGameObject = circleGameObject;
         }*/
+        setCountryTitle(str);
         Debug.Log(xVal.Count + ", " + yVal.Count);
         StartCoroutine(graphDelay(xVal, yVal));
     }
@@ -155,19 +159,27 @@ public class WindowGraph : MonoBehaviour
 
         GameObject lastCircleGameObject = null;
 
-        for(int i = 0; i < xVal.Count * 2; i ++)
+        for(int i = 0; i < xVal.Count * 8; i ++)
         {
-            if(i % 2 == 0)
+            if(i % 8 == 0)
             {
-                float xPos = (xVal[i/2]) * graphWidth;
-                float yPos = (yVal[i/2]) * graphHeight * yMultiplier;
+                float xPos = (xVal[i/8]) * graphWidth;
+                float yPos = (yVal[i/8]) * graphHeight * yMultiplier;
                 GameObject circleGameObject = CreateCircle(new Vector2(xPos, yPos));
                 if (lastCircleGameObject != null)
                     CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
                 lastCircleGameObject = circleGameObject;
+                cm.setIntensity(yVal[i / 8]);
             }
             yield return null;
         }
+        cm.setIntensity(0);
+        Debug.Log("Graph is done");
+    }
+
+    public void setCountryTitle(string str)
+    {
+        countrySlot.text = Regex.Replace(str, @"\b[a-z]", m => m.Value.ToUpper());
     }
 
     public void clearGraph()
@@ -195,7 +207,7 @@ public class WindowGraph : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(dist, 3f);
         rectTransform.anchoredPosition = dotPosA + dir * dist * 0.5f;
         rectTransform.localEulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(dir));
-        gameObject.GetComponent<Image>().color = Color.green;
+        gameObject.GetComponent<Image>().color = Color.white;
         lines.Add(gameObject);
     }
 
