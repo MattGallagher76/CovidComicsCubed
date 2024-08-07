@@ -26,13 +26,13 @@ public class CoughManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         float r = Random.Range(0, 1f);
         //Debug.Log(r);
         if (r > ac.Evaluate(intensity) && intensity != 0)
         {
-            //Debug.Log("Playing Cough - I:" + intensity + ", R:" + r);
+            Debug.Log("Playing Cough - I:" + intensity + ", R:" + r);
             GameObject gb = Instantiate(audioSourcePrefab);
             gb.transform.position = new Vector3(Random.Range(-3f, 3f), Random.Range(1f, 2f), Random.Range(-3f, 3f));
 

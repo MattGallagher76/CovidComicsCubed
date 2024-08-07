@@ -159,19 +159,19 @@ public class WindowGraph : MonoBehaviour
 
         GameObject lastCircleGameObject = null;
 
-        for(int i = 0; i < xVal.Count * 8; i ++)
+        for(int i = 0; i < xVal.Count; i ++)
         {
-            if(i % 8 == 0)
+            if(i % 1 == 0)
             {
-                float xPos = (xVal[i/8]) * graphWidth;
-                float yPos = (yVal[i/8]) * graphHeight * yMultiplier;
+                float xPos = (xVal[i]) * graphWidth;
+                float yPos = (yVal[i]) * graphHeight * yMultiplier;
                 GameObject circleGameObject = CreateCircle(new Vector2(xPos, yPos));
                 if (lastCircleGameObject != null)
                     CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
                 lastCircleGameObject = circleGameObject;
-                cm.setIntensity(yVal[i / 8]);
+                cm.setIntensity(yVal[i]);
             }
-            yield return null;
+            yield return new WaitForSeconds(0.01f);
         }
         cm.setIntensity(0);
         Debug.Log("Graph is done");
