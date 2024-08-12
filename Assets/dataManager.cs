@@ -25,6 +25,8 @@ public class dataManager : MonoBehaviour
     GameObject em;
 
     public DataSetSelector currentGraph;
+
+    private bool isGraphShowing = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -91,6 +93,10 @@ public class dataManager : MonoBehaviour
 
     public void graph(DataSetSelector dss)
     {
+        if (!isGraphShowing)
+        {
+            FindObjectOfType<WindowGraph>().showGraph();
+        }
         if (currentGraph != null)
             currentGraph.clearGraph();
         currentGraph = dss;
@@ -168,7 +174,8 @@ public class dataManager : MonoBehaviour
                     DataSetSelector dss = go.GetComponent<DataSetSelector>();
                     dss.handRefernce = handReference;
                     go.transform.parent = em.transform;
-                    go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 1f, count % xSize * distScale);
+                    go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 1f, -3f + (count % xSize * distScale));
+                    go.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
                     dss.setName(fields[0].ToLower());
                     populationDict.TryGetValue(fields[0].ToLower(), out int pop);
                     dss.population = pop;

@@ -27,6 +27,9 @@ public class WindowGraph : MonoBehaviour
     private List<GameObject> circles = new List<GameObject>();
     private List<GameObject> lines = new List<GameObject>();
 
+    public AnimationCurve ac;
+    public GameObject graphParent;
+
     private void Awake()
     {
         List<float> valueListY = new List<float>() { 0f, 0.75f, 0.50f, 0.25f, 1.00f};
@@ -175,6 +178,27 @@ public class WindowGraph : MonoBehaviour
         }
         cm.setIntensity(0);
         Debug.Log("Graph is done");
+    }
+
+    public void showGraph()
+    {
+        Debug.Log("Starting Coroutine");
+        StartCoroutine(changeGraph(graphParent, new Vector3(-1.834f, 1.25f, -0.641f), new Vector3(0, 0f, 0f), new Vector3(0.00087626f, 0.00087626f, 0.00087626f)));
+    }
+
+    IEnumerator changeGraph(GameObject parent, Vector3 targetLocation, Vector3 targetEuler, Vector3 targetScale)
+    {
+        Vector3 startLoc = parent.transform.localPosition;
+        Vector3 startEul = parent.transform.eulerAngles;
+        Vector3 startScale = parent.transform.localScale;
+        for(int i = 0; i < 100; i ++)
+        {
+            Debug.Log(i);
+            parent.transform.localPosition = Vector3.Lerp(startLoc, targetLocation, ac.Evaluate(i / 100f));
+            parent.transform.eulerAngles = Vector3.Lerp(startEul, targetEuler, ac.Evaluate(i / 100f));
+            parent.transform.localScale = Vector3.Lerp(startScale, targetScale, ac.Evaluate(i / 100f));
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     public void setCountryTitle(string str)
