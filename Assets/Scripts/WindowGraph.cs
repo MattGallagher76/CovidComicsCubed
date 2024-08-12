@@ -30,6 +30,8 @@ public class WindowGraph : MonoBehaviour
     public AnimationCurve ac;
     public GameObject graphParent;
 
+    bool isFirstTime = true;
+
     private void Awake()
     {
         List<float> valueListY = new List<float>() { 0f, 0.75f, 0.50f, 0.25f, 1.00f};
@@ -152,6 +154,21 @@ public class WindowGraph : MonoBehaviour
         }*/
         setCountryTitle(str);
         Debug.Log(xVal.Count + ", " + yVal.Count);
+        if (isFirstTime)
+            StartCoroutine(graphDelayFirstTime(xVal, yVal));
+        else
+            StartCoroutine(graphDelay(xVal, yVal));
+    }
+
+    IEnumerator graphDelayFirstTime(List<float> xVal, List<float> yVal)
+    {
+        isFirstTime = false;
+        float timer = 0f;
+        while(timer <= 2.75f)
+        {
+            timer += Time.deltaTime;
+            yield return true;
+        }
         StartCoroutine(graphDelay(xVal, yVal));
     }
 
@@ -191,12 +208,11 @@ public class WindowGraph : MonoBehaviour
         Vector3 startLoc = parent.transform.localPosition;
         Vector3 startEul = parent.transform.eulerAngles;
         Vector3 startScale = parent.transform.localScale;
-        for(int i = 0; i < 100; i ++)
+        for(int i = 0; i < 200; i ++)
         {
-            Debug.Log(i);
-            parent.transform.localPosition = Vector3.Lerp(startLoc, targetLocation, ac.Evaluate(i / 100f));
-            parent.transform.eulerAngles = Vector3.Lerp(startEul, targetEuler, ac.Evaluate(i / 100f));
-            parent.transform.localScale = Vector3.Lerp(startScale, targetScale, ac.Evaluate(i / 100f));
+            parent.transform.localPosition = Vector3.Lerp(startLoc, targetLocation, ac.Evaluate(i / 200f));
+            parent.transform.eulerAngles = Vector3.Lerp(startEul, targetEuler, ac.Evaluate(i / 200f));
+            parent.transform.localScale = Vector3.Lerp(startScale, targetScale, ac.Evaluate(i / 200f));
             yield return new WaitForSeconds(0.01f);
         }
     }
@@ -228,10 +244,10 @@ public class WindowGraph : MonoBehaviour
 
         rectTransform.anchorMin = new Vector2(0, 0);
         rectTransform.anchorMax = new Vector2(0, 0);
-        rectTransform.sizeDelta = new Vector2(dist, 3f);
+        rectTransform.sizeDelta = new Vector2(dist, 2f);
         rectTransform.anchoredPosition = dotPosA + dir * dist * 0.5f;
         rectTransform.localEulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(dir));
-        gameObject.GetComponent<Image>().color = Color.white;
+        gameObject.GetComponent<Image>().color = Color.black;
         lines.Add(gameObject);
     }
 

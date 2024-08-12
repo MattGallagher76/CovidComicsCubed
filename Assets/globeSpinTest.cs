@@ -132,7 +132,7 @@ public class globeSpinTest : MonoBehaviour
                 {
                     Vector3 lastPosition = lastHandPositions[handID];
                     Vector3 direction = currentHandPosition - lastPosition;
-                    direction = new Vector3(0, 0, direction.z);
+                    direction = new Vector3(0, 0, -1f * direction.z);
 
                     // Calculate the torque based on the hand movement
                     Vector3 torque = Vector3.Cross(direction, Vector3.right) * spinSpeed / handPositions.Count;

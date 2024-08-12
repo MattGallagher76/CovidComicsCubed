@@ -66,7 +66,6 @@ public class GuidePathManager : MonoBehaviour
         float timer = 0f;
         while (timer <= waitDur)
         {
-            Debug.Log(timer + ", " + waitDur);
             timer += Time.deltaTime;
             yield return true;
         }

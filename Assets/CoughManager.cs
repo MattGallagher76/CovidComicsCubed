@@ -38,7 +38,7 @@ public class CoughManager : MonoBehaviour
 
             AudioSource audioSource = gb.GetComponent<AudioSource>();
             audioSource.pitch = Random.Range(minPitch, maxPitch);
-            audioSource.volume = Random.Range(minVolume, maxVolume) * intensity;
+            audioSource.volume = Random.Range(minVolume, maxVolume) + Mathf.Pow(intensity, 0.5f) / 2f;
 
             AudioClip aud = coughClips[Random.Range(0, coughClips.Count)];
             StartCoroutine(PlayCoughAndNotify(audioSource, aud));
