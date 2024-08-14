@@ -32,6 +32,8 @@ public class WindowGraph : MonoBehaviour
 
     bool isFirstTime = true;
 
+    Coroutine currentGraphCoroutine;
+
     private void Awake()
     {
         List<float> valueListY = new List<float>() { 0f, 0.75f, 0.50f, 0.25f, 1.00f};
@@ -40,6 +42,16 @@ public class WindowGraph : MonoBehaviour
         //ShowGraph(valueListX, valueListY);
 
         drawGraphBackground();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Stopping Coroutine");
+            StopAllCoroutines();
+            //StopCoroutine(currentGraphCoroutine);
+        }
     }
 
     private void drawGraphBackground()
@@ -154,10 +166,16 @@ public class WindowGraph : MonoBehaviour
         }*/
         setCountryTitle(str);
         Debug.Log(xVal.Count + ", " + yVal.Count);
+        if (currentGraphCoroutine != null)
+            StopAllCoroutines();
         if (isFirstTime)
-            StartCoroutine(graphDelayFirstTime(xVal, yVal));
+        {
+            currentGraphCoroutine = StartCoroutine(graphDelayFirstTime(xVal, yVal));
+        }
         else
-            StartCoroutine(graphDelay(xVal, yVal));
+        {
+            currentGraphCoroutine = StartCoroutine(graphDelay(xVal, yVal));
+        }
     }
 
     IEnumerator graphDelayFirstTime(List<float> xVal, List<float> yVal)
