@@ -25,11 +25,17 @@ public class DataSetSelector : MonoBehaviour
     public static globeSpinTest gst;
 
     public TextMeshPro nameDisplay;
-    public Transform handRefernce;
     public float alphaHandDistance;
     public float solidHandDistance;
 
     public bool isOnGlobe;
+
+    GameObject[] hands;
+
+    public void initHands()
+    {
+        hands = GameObject.FindGameObjectsWithTag(handTag);
+    }
 
     //For graph, plot all points on a spline with no shown points or lines,
     //Then have an invisable object move accross the spline with a line being generated behind it
@@ -163,33 +169,43 @@ public class DataSetSelector : MonoBehaviour
         }
 
         FindObjectOfType<WindowGraph>().ShowGraph(graphValuesX, graphValuesY, countryName);
-        GetComponent<Renderer>().material.color = Color.red;
     }
 
     public void clearGraph()
     {
         //Destroy(localGraphLine);
         FindObjectOfType<WindowGraph>().clearGraph();
-        GetComponent<Renderer>().material.color = Color.white;
     }
 
     public void setName(string n)
     {
         countryName = n;
-        nameDisplay.text = Regex.Replace(n, @"\b[a-z]", m => m.Value.ToUpper());
+        //nameDisplay.text = Regex.Replace(n, @"\b[a-z]", m => m.Value.ToUpper());
     }
 
     public void Update()
     {
         if (graph)
-        {
+        { 
             graph = false;
             graphData();
         }
 
+        float dist = Mathf.Min(Vector3.Distance(hands[0].transform.position, transform.parent.position), 
+                               Vector3.Distance(hands[1].transform.position, transform.parent.position));
+        if (dist < 0.3f)
+        {
+            transform.parent.localScale = (-(2f / 3f) * dist + 1.2f) * Vector3.one;
+        }
+        else
+        {
+            transform.parent.localScale = Vector3.one;
+        }
+
+        /*
         if (!isOnGlobe)
         {
-            float dist = Vector3.Distance(handRefernce.position, transform.position);
+            float dist = 1000;//Vector3.Distance(handRefernce.position, transform.position);
             if (dist < solidHandDistance)
             {
                 nameDisplay.color = Color.black;
@@ -198,36 +214,14 @@ public class DataSetSelector : MonoBehaviour
             {
                 Color c = Color.black;
                 c = new Color(c.r, c.g, c.b, 1 - (dist - solidHandDistance) / (alphaHandDistance - solidHandDistance));
-                nameDisplay.color = c;
+                //nameDisplay.color = c;
             }
             else
             {
-                nameDisplay.color = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
+                //nameDisplay.color = new Color(Color.black.r, Color.black.g, Color.black.b, 0f);
             }
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Entered dss");
-        if (isOnGlobe)
-        {
-            gst = FindObjectOfType<globeSpinTest>();
-            gst.updateDss(this);
-        }
-        else
-        {
-            Debug.Log(other.gameObject.name);
-            if (other.gameObject.CompareTag(handTag))
-            {
-                graphData();
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        gst.dssColliderExited();
+        */
     }
 
     public class graphValue

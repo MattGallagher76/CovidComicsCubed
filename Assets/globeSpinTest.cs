@@ -26,24 +26,6 @@ public class globeSpinTest : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void updateDss(DataSetSelector dss)
-    {
-        currentDss = dss;
-    }
-
-    public void dssColliderExited()
-    {
-        //Debug.Log("Exited dss - Timer: " + timer);
-        if(timer > 0)
-        {
-            //Tap
-            //Debug.Log("Tapped: " + currentDss.countryName);
-            currentDss.graphData();
-            timer = 0f;
-            isInside = false;   //Forces the hand to leave before trying to spin a gain
-        }
-    }
-
     private void Update()
     {
 
@@ -89,12 +71,20 @@ public class globeSpinTest : MonoBehaviour
         {
             if(isSwipe)
             {
+                Debug.Log("Was a swipe");
                 timer = 0f;
                 isInside = false;
                 isSwipe = false;
             }
             else
             {
+                if(timer > 0)
+                {
+                    Debug.Log("Was a tap");
+                    timer = 0;
+                    isInside = false;
+                    closestDss(other.gameObject.GetInstanceID()).GetComponent<DataSetSelector>().graphData();
+                }
                 isInside = false;
                 isSwipe = false;
             }
@@ -106,6 +96,21 @@ public class globeSpinTest : MonoBehaviour
                 //Debug.Log("Hand exited trigger.");
             }
         }
+    }
+
+    GameObject closestDss(int handId)
+    {
+        float dist = 1000f;
+        GameObject closest = null;
+        foreach (DataSetSelector dss in FindObjectsOfType<DataSetSelector>())
+        {
+            if(Vector3.Distance(dss.gameObject.transform.position, lastHandPositions[handId]) < dist)
+            {
+                dist = Vector3.Distance(dss.gameObject.transform.position, lastHandPositions[handId]);
+                closest = dss.gameObject;
+            }
+        }
+        return closest;
     }
 
     void OnTriggerStay(Collider other)

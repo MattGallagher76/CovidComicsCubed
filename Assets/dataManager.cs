@@ -17,8 +17,6 @@ public class dataManager : MonoBehaviour
     public GameObject dssPrefab;
     public GameObject emptyPrefab;
 
-    public Transform handReference;
-
     public int xSize;
     public float distScale;
     int count = 0;
@@ -129,6 +127,21 @@ public class dataManager : MonoBehaviour
         }
     }
 
+    private GameObject FindChildByName(string childName)
+    {
+        foreach (Transform child in transform)
+        {
+            Debug.Log(child.gameObject.name);
+            transform.Find(childName);
+            if (child.gameObject.name == childName)
+            {
+                return child.gameObject;
+            }
+        }
+        Debug.Log(childName);
+        return null; // Return null if no child with the given name is found
+    }
+
     private void ProcessCSV(string csvData)
     {
         string[] lines = csvData.Split('\n');
@@ -170,19 +183,37 @@ public class dataManager : MonoBehaviour
                     }
 
                     //Eventually this will need to be replace with finding the object rather than making it
-                    GameObject go = Instantiate(dssPrefab);
-                    DataSetSelector dss = go.GetComponent<DataSetSelector>();
-                    dss.handRefernce = handReference;
-                    go.transform.parent = em.transform;
-                    go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 1f, -3f + (count % xSize * distScale));
-                    go.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
-                    dss.setName(fields[0].ToLower());
-                    populationDict.TryGetValue(fields[0].ToLower(), out int pop);
-                    dss.population = pop;
-                    dict.Add(fields[0].ToLower(), dss);
-                    go.name = fields[0].ToLower();
-                    dss.addValue(float.Parse(fields[2]), float.Parse(fields[1]));
-                    count++;
+                    
+                    Transform temp = transform.Find(fields[0]);
+
+                    if (temp == null)
+                        Debug.Log(fields[0] + " had an issue");
+                    else
+                    {
+                        GameObject controller = new GameObject("Controler - " + fields[0]);
+                        GameObject go = temp.gameObject;
+                        GameObject goDss = Instantiate(dssPrefab);
+                        controller.transform.SetParent(transform, true);
+
+                        controller.transform.position = transform.position;
+                        goDss.transform.SetParent(controller.transform, true);
+                        go.transform.SetParent(controller.transform, true);
+
+                        goDss.transform.localPosition = go.transform.localPosition;
+
+                        DataSetSelector dss = goDss.GetComponent<DataSetSelector>();
+
+                        //go.transform.parent = em.transform;
+                        //go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 1f, -3f + (count % xSize * distScale));
+                        //go.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+                        dss.setName(fields[0].ToLower());
+                        populationDict.TryGetValue(fields[0].ToLower(), out int pop);
+                        dss.population = pop;
+                        dict.Add(fields[0].ToLower(), dss);
+                        go.name = fields[0].ToLower();
+                        dss.addValue(float.Parse(fields[2]), float.Parse(fields[1]));
+                        count++;
+                    }
                 }
             }
         }
