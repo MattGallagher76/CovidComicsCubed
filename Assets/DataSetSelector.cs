@@ -193,8 +193,8 @@ public class DataSetSelector : MonoBehaviour
             graphData();
         }
 
-        float dist = Mathf.Min(Vector3.Distance(hands[0].transform.position, transform.parent.position), 
-                               Vector3.Distance(hands[1].transform.position, transform.parent.position));
+        float dist = Mathf.Min(Vector3.Distance(hands[0].transform.position, transform.position), 
+                               Vector3.Distance(hands[1].transform.position, transform.position));
         if (countryName.ToLower().Equals("united states"))
         {
             Debug.Log("Dist: " + dist + ", Scale: " + transform.parent.localScale);

@@ -11,12 +11,11 @@ public class CoughManager : MonoBehaviour
 
     public float minPitch = 0.9f; // Minimum pitch value
     public float maxPitch = 1.1f; // Maximum pitch value
-    public float minVolume = 0.1f; // Minimum volume value
-    public float maxVolume = 0.4f; // Maximum volume value
 
     public GameObject audioSourcePrefab;
 
     public AnimationCurve ac;
+    public AnimationCurve volumeAC;
     private float maxIntensity = 0.001479077f;
 
     private int currentCoughCount = 0;
@@ -38,7 +37,7 @@ public class CoughManager : MonoBehaviour
 
             AudioSource audioSource = gb.GetComponent<AudioSource>();
             audioSource.pitch = Random.Range(minPitch, maxPitch);
-            audioSource.volume = Random.Range(minVolume, maxVolume) + Mathf.Pow(intensity, 0.5f) / 2f;
+            audioSource.volume = volumeAC.Evaluate(intensity);
 
             AudioClip aud = coughClips[Random.Range(0, coughClips.Count)];
             StartCoroutine(PlayCoughAndNotify(audioSource, aud));
