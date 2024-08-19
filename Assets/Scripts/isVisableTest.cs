@@ -17,6 +17,8 @@ public class isVisableTest : MonoBehaviour
 
     public Animator zoom;
 
+    public bool StartAni;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +31,7 @@ public class isVisableTest : MonoBehaviour
         if(!hasDisapeared)
         {
             Vector3 temp = cm.WorldToViewportPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
-            if (temp.x >= 0 && temp.x <= 1 && temp.y >= 0 && temp.y <= 1 && temp.z > 0)
+            if ((temp.x >= 0 && temp.x <= 1 && temp.y >= 0 && temp.y <= 1 && temp.z > 0) || StartAni)
             {
                 timer -= Time.deltaTime;
                 zoom.SetBool("zoom", true);

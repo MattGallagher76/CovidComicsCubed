@@ -14,13 +14,13 @@ public class GuidePathManager : MonoBehaviour
     public float nextDuration;
 
     public float debugTimer = 0f;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         hidePathsOnStart();
     }
 
-    void hidePathsOnStart()
+    public void hidePathsOnStart()
     {
         foreach(GameObject gb in preNextPaths)
         {
@@ -88,6 +88,7 @@ public class GuidePathManager : MonoBehaviour
         gb.GetComponent<Renderer>().material.color = c2;
     }
 
+    
     // Update is called once per frame
     void Update()
     {
@@ -99,4 +100,5 @@ public class GuidePathManager : MonoBehaviour
         if (debugTimer != -1f)
             debugTimer += Time.deltaTime;
     }
+    
 }

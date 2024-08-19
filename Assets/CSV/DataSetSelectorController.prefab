@@ -50,7 +50,39 @@ MonoBehaviour:
   graph: 0
   dm: {fileID: 0}
   nameDisplay: {fileID: 0}
-  handRefernce: {fileID: 0}
   alphaHandDistance: 0.6
   solidHandDistance: 0.45
   isOnGlobe: 0
+  ac:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.8309352
+      inSlope: -0.0024992598
+      outSlope: -0.0024992598
+      tangentMode: 0
+      weightedMode: 1
+      inWeight: 0.9824324
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

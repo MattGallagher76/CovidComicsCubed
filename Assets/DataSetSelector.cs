@@ -30,6 +30,8 @@ public class DataSetSelector : MonoBehaviour
 
     public bool isOnGlobe;
 
+    public AnimationCurve ac;
+
     GameObject[] hands;
 
     public void initHands()
@@ -193,13 +195,18 @@ public class DataSetSelector : MonoBehaviour
 
         float dist = Mathf.Min(Vector3.Distance(hands[0].transform.position, transform.parent.position), 
                                Vector3.Distance(hands[1].transform.position, transform.parent.position));
-        if (dist < 0.3f)
+        if (countryName.ToLower().Equals("united states"))
         {
-            transform.parent.localScale = (-(2f / 3f) * dist + 1.2f) * Vector3.one;
+            Debug.Log("Dist: " + dist + ", Scale: " + transform.parent.localScale);
+        }
+
+        if (dist < 1f)
+        {
+            transform.parent.localScale = ac.Evaluate(dist / 1f) * 0.025f * Vector3.one;
         }
         else
         {
-            transform.parent.localScale = Vector3.one;
+            transform.parent.localScale = Vector3.one * 0.02077338f;
         }
 
         /*

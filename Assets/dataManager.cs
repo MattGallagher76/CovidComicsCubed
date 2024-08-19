@@ -202,7 +202,7 @@ public class dataManager : MonoBehaviour
                         goDss.transform.localPosition = go.transform.localPosition;
 
                         DataSetSelector dss = goDss.GetComponent<DataSetSelector>();
-
+                        dss.initHands();
                         //go.transform.parent = em.transform;
                         //go.transform.localPosition = new Vector3(0.5f, count / xSize * distScale + 1f, -3f + (count % xSize * distScale));
                         //go.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
