@@ -9,11 +9,9 @@ public class GuidePathManager : MonoBehaviour
 
     public List<GameObject> postNextPaths;
 
+    public float comicDuration;
     public float durBetweenPath;
     public float durationToShow;
-    public float nextDuration;
-
-    public float debugTimer = 0f;
 
     private void Start()
     {
@@ -36,21 +34,25 @@ public class GuidePathManager : MonoBehaviour
         }
     }
 
-    public void showPrePaths(List<GameObject> paths)
+    public void showPrePaths()
     {
-        showPaths(paths);
-        StartCoroutine(waitToShowPostPaths());
+        StartCoroutine(waitToShowPrePaths());
     }
 
-    IEnumerator waitToShowPostPaths()
+    public void showPostPaths()
+    {
+        showPaths(postNextPaths);
+    }
+
+    IEnumerator waitToShowPrePaths()
     {
         float timer = 0f;
-        while(timer <= nextDuration)
+        while (timer <= comicDuration)
         {
             timer += Time.deltaTime;
             yield return true;
         }
-        showPaths(postNextPaths);
+        showPaths(preNextPaths);
     }
 
     public void showPaths(List<GameObject> paths)
@@ -87,18 +89,4 @@ public class GuidePathManager : MonoBehaviour
         c2 = new Color(c2.r, c2.g, c2.b, 1f);
         gb.GetComponent<Renderer>().material.color = c2;
     }
-
-    
-    // Update is called once per frame
-    void Update()
-    {
-        if (debugTimer >= 2f)
-        {
-            debugTimer = -1f;
-            showPrePaths(preNextPaths);
-        }
-        if (debugTimer != -1f)
-            debugTimer += Time.deltaTime;
-    }
-    
 }

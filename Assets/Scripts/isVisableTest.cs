@@ -5,7 +5,6 @@ using UnityEngine;
 public class isVisableTest : MonoBehaviour
 {
     public Camera cm;
-    public float timer = 5;
     public bool hasDisapeared;
 
     private Vector3 startingScale;
@@ -28,6 +27,7 @@ public class isVisableTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if(!hasDisapeared)
         {
             Vector3 temp = cm.WorldToViewportPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
@@ -45,11 +45,11 @@ public class isVisableTest : MonoBehaviour
                 timer = 5;
                 zoom.SetBool("zoom", false);
             }
-        }
-        if(timer <= 0)
+        }*/
+        if(StartAni)
         {
-            hasDisapeared = true;
-            transform.localScale = Vector3.zero;
+            StartAni = false;
+            zoom.SetBool("zoom", true);
         }
     }
 
@@ -58,5 +58,10 @@ public class isVisableTest : MonoBehaviour
         if (totalSum == 0 || totalCalls == 0)
             throw new System.Exception("Player has not seen comic");
         return totalSum / totalCalls;
+    }
+
+    public void startSequence()
+    {
+        zoom.SetBool("zoom", true);
     }
 }

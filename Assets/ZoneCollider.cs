@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class ZoneCollider : MonoBehaviour
 {
-    public string zoneID;
+    public int zoneID;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("MainCamera"))
         {
             Debug.Log("Player has crossed " + zoneID);
+            FindObjectOfType<TotalExperienceManager>().ZoneColliderTrigger(zoneID);
         }
     }
 }
