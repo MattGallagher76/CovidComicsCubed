@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FollowPlayerNatural : MonoBehaviour
 {
+    public isVisableTest DoomComic;
+
     public Transform playerTarget;
     public Transform centerRoom;
 
@@ -209,7 +211,7 @@ public class FollowPlayerNatural : MonoBehaviour
 
     public void setIsInRoom(bool t)
     {
-        targetY = FindObjectOfType<isVisableTest>().getHeadHeight() - 0.2f;
+        targetY = DoomComic.getHeadHeight() - 0.2f;
         isInRegion = t;
         //targetY = (t ? playerTarget : centerRoom).position.y;
         transform.position = new Vector3(transform.position.x, targetY, transform.position.z);

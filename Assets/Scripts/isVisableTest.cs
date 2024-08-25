@@ -18,6 +18,8 @@ public class isVisableTest : MonoBehaviour
 
     public bool StartAni;
 
+    public float distanceThreshold;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +53,24 @@ public class isVisableTest : MonoBehaviour
             StartAni = false;
             zoom.SetBool("zoom", true);
         }
+    }
+
+    public bool shouldSequenceStart()
+    {
+        Vector3 temp = cm.WorldToViewportPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
+        float dist = Vector3.Distance(head.transform.position, this.transform.position);
+
+        Debug.Log("Dist: " + dist);
+
+        if (temp.x >= 0 && temp.x <= 1 && temp.y >= 0 && temp.y <= 1 && temp.z > 0 && dist < distanceThreshold)
+        {
+            totalSum = head.transform.position.y;
+            totalCalls = 1;
+            return true;
+        }
+
+
+        return false;
     }
 
     public float getHeadHeight()

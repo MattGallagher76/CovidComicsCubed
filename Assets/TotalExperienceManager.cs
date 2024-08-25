@@ -9,6 +9,10 @@ public class TotalExperienceManager : MonoBehaviour
     //public GuidePathManager JoggingPathManager;
     public GuidePathManager DataVisPathManager;
 
+    public GameObject DoomParent;
+    public GameObject JoggingParent;
+    public GameObject DataVisParent;
+
     public isVisableTest DoomScrollingComicIntro;
     public isVisableTest JoggingComicIntro;
     public isVisableTest DataVisComicIntro;
@@ -58,16 +62,17 @@ public class TotalExperienceManager : MonoBehaviour
     {
         if (timer > 0f)
             timer -= Time.deltaTime;
+        Debug.Log("Current State: " + state);
         switch (state)
         {
             case 0:
                 //Waiting for start
                 //If moved close to comic and looking at it
-                if(false)
+                if(DoomScrollingComicIntro.shouldSequenceStart())
                 {
                     DoomScrollingComicIntro.startSequence();
                     DoomScrollingPathManager.showPrePaths();
-                    //DoomScoll scene visable
+                    DoomParent.SetActive(true);
                     timer = DoomScrollingDuration;
                     state = 1;
                 }
@@ -77,13 +82,14 @@ public class TotalExperienceManager : MonoBehaviour
                 {
                     timer = urgeDuration;
                     DoomScrollingPathManager.showPostPaths();
+                    DoomScrollingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                     state = 2;
                 }
                 break;
             case 2:
                 if(timer <= 0f)
                 {
-                    //Disable doom scene;
+                    DoomParent.SetActive(false);
                     timer = 0f;
                     state = 3;
                 }
@@ -94,11 +100,12 @@ public class TotalExperienceManager : MonoBehaviour
             //------------------------------------------------
             case 4:
                 //if close enough to next comic and looking at it
-                if(false)
+                if(JoggingComicIntro.shouldSequenceStart())
                 {
                     state = 5;
                     JoggingComicIntro.startSequence();
-                    //Jogging scene visable
+                    JoggingParent.SetActive(true);
+                    JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 }
                 break;
             case 5:
@@ -106,7 +113,7 @@ public class TotalExperienceManager : MonoBehaviour
                 break;
             case 6:
                 //if close enough to next comic and looking at it
-                if(false)
+                if (DataVisComicIntro.shouldSequenceStart())
                 {
                     state = 7;
                     DataVisComicIntro.startSequence();
@@ -120,12 +127,13 @@ public class TotalExperienceManager : MonoBehaviour
                     DataVisPathManager.showPostPaths();
                     timer = urgeDuration;
                     state = 8;
+                    DataVisComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 }
                 break;
             case 8:
                 if(timer < 0f)
                 {
-                    //Disable data vis scene
+                    DataVisParent.SetActive(true);
                     state = 9;
                     timer = 0f;
                 }
@@ -158,7 +166,7 @@ public class TotalExperienceManager : MonoBehaviour
             if(state == 2 || state == 3)
             {
                 //Zone 1 has been entered and the experience can move from doom to jogging
-                //Disable doom scene if not disabled already
+                DoomParent.SetActive(false);
                 state = 4;
             }
         }
@@ -166,7 +174,7 @@ public class TotalExperienceManager : MonoBehaviour
         {
             if(state == 5)
             {
-                //Disable jogging scene
+                DoomParent.SetActive(false);
                 state = 6;
             }
         }
@@ -174,7 +182,7 @@ public class TotalExperienceManager : MonoBehaviour
         {
             if(state == 8 || state == 9)
             {
-                //Disable data vis if not disabled already
+                DataVisParent.SetActive(false);
                 state = 10;
             }
         }
