@@ -24,6 +24,8 @@ public class NewPageGenerator : MonoBehaviour
     public GameObject emptyPrefab;
     public Transform focusPoint;
 
+    public GameObject debugSphere;
+
     /// <summary>
     /// 0 is looking at
     /// 1 is no orientation
@@ -47,6 +49,8 @@ public class NewPageGenerator : MonoBehaviour
     private int badComicIndex = 0;
 
     public AnimationCurve thetaSmoothing;
+
+    public AnimationCurve randomCurve;
 
     // Start is called before the first frame update
     void Start()
@@ -104,6 +108,10 @@ public class NewPageGenerator : MonoBehaviour
                     2.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 180) * Mathf.Deg2Rad));
                 t *= transform.localScale.x;
                 t += transform.position;
+
+                //Instantiate(debugSphere);
+                //debugSphere.transform.position = t;
+
                 goodComicLocations.Insert(i, t);
                 i++;
                 /*
@@ -129,6 +137,15 @@ public class NewPageGenerator : MonoBehaviour
                 updatePageControllers();
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                makePage();
+            }
+        }
+
         previousPos = transform.position;
     }
 
@@ -207,12 +224,14 @@ public class NewPageGenerator : MonoBehaviour
 
         if (isGood)
         {
+            //Vector3 temp = goodComicLocations[Mathf.RoundToInt((randomCurve.Evaluate(UnityEngine.Random.Range(0, 1f))) * goodComicLocations.Count)];
             Vector3 temp = goodComicLocations[UnityEngine.Random.Range(0, goodComicLocations.Count)];
             goodComicLocations.Remove(temp);
             return temp;
         }
         else
         {
+            //Vector3 temp = badComicLocations[Mathf.RoundToInt((randomCurve.Evaluate(UnityEngine.Random.Range(0, 1f))) * badComicLocations.Count)];
             Vector3 temp = badComicLocations[UnityEngine.Random.Range(0, badComicLocations.Count)];
             badComicLocations.Remove(temp);
             return temp;

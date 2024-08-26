@@ -17,6 +17,8 @@ public class dataManager : MonoBehaviour
     public GameObject dssPrefab;
     public GameObject emptyPrefab;
 
+    public Material selectedCountry;
+
     public int xSize;
     public float distScale;
     int count = 0;

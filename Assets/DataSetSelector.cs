@@ -34,6 +34,8 @@ public class DataSetSelector : MonoBehaviour
 
     GameObject[] hands;
 
+    Material defaultMaterial;
+
     public void initHands()
     {
         hands = GameObject.FindGameObjectsWithTag(handTag);
@@ -132,6 +134,8 @@ public class DataSetSelector : MonoBehaviour
 
     public void graphData()
     {
+        defaultMaterial = GetComponent<Renderer>().material;
+        GetComponent<Renderer>().material = FindObjectOfType<dataManager>().selectedCountry;
         dm.graph(this);
         /*
         localGraphLine = Instantiate(graphLine);
@@ -177,6 +181,7 @@ public class DataSetSelector : MonoBehaviour
     {
         //Destroy(localGraphLine);
         FindObjectOfType<WindowGraph>().clearGraph();
+        GetComponent<Renderer>().material = defaultMaterial;
     }
 
     public void setName(string n)
@@ -195,18 +200,13 @@ public class DataSetSelector : MonoBehaviour
 
         float dist = Mathf.Min(Vector3.Distance(hands[0].transform.position, transform.position), 
                                Vector3.Distance(hands[1].transform.position, transform.position));
-        if (countryName.ToLower().Equals("united states"))
-        {
-            Debug.Log("Dist: " + dist + ", Scale: " + transform.parent.localScale);
-        }
-
         if (dist < 1f)
         {
-            transform.parent.localScale = ac.Evaluate(dist / 1f) * 0.025f * Vector3.one;
+            transform.parent.localScale = Vector3.one * (ac.Evaluate(dist / 1f) * -0.0024499f + 0.018f);
         }
         else
         {
-            transform.parent.localScale = Vector3.one * 0.02077338f;
+            transform.parent.localScale = Vector3.one * 0.0155501f;
         }
 
         /*

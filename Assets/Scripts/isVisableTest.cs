@@ -60,7 +60,7 @@ public class isVisableTest : MonoBehaviour
         Vector3 temp = cm.WorldToViewportPoint(transform.position, Camera.MonoOrStereoscopicEye.Mono);
         float dist = Vector3.Distance(head.transform.position, this.transform.position);
 
-        Debug.Log("Dist: " + dist);
+//        Debug.Log("Dist: " + dist);
 
         if (temp.x >= 0 && temp.x <= 1 && temp.y >= 0 && temp.y <= 1 && temp.z > 0 && dist < distanceThreshold)
         {

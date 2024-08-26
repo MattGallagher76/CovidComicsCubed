@@ -122,6 +122,9 @@ namespace PathCreation.Examples
                     //The user has gotten close enough to the women to start the akward shimmy
                     if(shuffleTimer >= 0f)
                     {
+                        Debug.Log("is null: " + mirrorTarget == null);
+                        Debug.Log(mirrorTarget.name);
+                        Debug.Log("Pos: " + mirrorTarget.position);
                         shimmy(mirrorTarget.position);
                         transform.LookAt(playerRef.transform.position);
                         transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
@@ -181,7 +184,7 @@ namespace PathCreation.Examples
 
             float distanceToLeftRef = Vector3.Distance(ref1, LeftRef.position);
             float newDistanceToLeftRef = Vector3.Distance(ref1 + dir * mag, LeftRef.position);
-            Debug.Log(Vector3.Angle(LeftRef.position - ref1, dir * mag));
+            //Debug.Log(Vector3.Angle(LeftRef.position - ref1, dir * mag));
 
             if (distanceToLeftRef > newDistanceToLeftRef)
             {
@@ -194,7 +197,7 @@ namespace PathCreation.Examples
                 animator.SetFloat("SideAnimationSpeed", mag * sideAnimationSpeedCoef);
             }
 
-            debugText.text = "Cur: " + ref1 + "\nTar: " + target + "\nMag: " + mag;
+            //debugText.text = "Cur: " + ref1 + "\nTar: " + target + "\nMag: " + mag;
 
             transform.position += dir * mag;
         }

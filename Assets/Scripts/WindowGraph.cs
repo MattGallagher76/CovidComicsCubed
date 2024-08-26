@@ -32,6 +32,8 @@ public class WindowGraph : MonoBehaviour
 
     bool isFirstTime = true;
 
+    float pauseTimer = 0f;
+
     Coroutine currentGraphCoroutine;
 
     private void Awake()
@@ -46,6 +48,10 @@ public class WindowGraph : MonoBehaviour
 
     private void Update()
     {
+        if (pauseTimer > 0)
+            pauseTimer -= Time.deltaTime;
+        else if (pauseTimer < 0)
+            pauseTimer = 0;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("Stopping Coroutine");
@@ -164,18 +170,23 @@ public class WindowGraph : MonoBehaviour
                 CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
             lastCircleGameObject = circleGameObject;
         }*/
-        setCountryTitle(str);
-        Debug.Log(xVal.Count + ", " + yVal.Count);
-        if (currentGraphCoroutine != null)
-            StopAllCoroutines();
-        if (isFirstTime)
+
+        if(pauseTimer == 0)
         {
-            currentGraphCoroutine = StartCoroutine(graphDelayFirstTime(xVal, yVal));
+            setCountryTitle(str);
+            Debug.Log(xVal.Count + ", " + yVal.Count);
+            if (currentGraphCoroutine != null)
+                StopAllCoroutines();
+            if (isFirstTime)
+            {
+                currentGraphCoroutine = StartCoroutine(graphDelayFirstTime(xVal, yVal));
+            }
+            else
+            {
+                currentGraphCoroutine = StartCoroutine(graphDelay(xVal, yVal));
+            }
         }
-        else
-        {
-            currentGraphCoroutine = StartCoroutine(graphDelay(xVal, yVal));
-        }
+        pauseTimer = 2f;
     }
 
     IEnumerator graphDelayFirstTime(List<float> xVal, List<float> yVal)

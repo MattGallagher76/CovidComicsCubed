@@ -18,6 +18,11 @@ public class TotalExperienceManager : MonoBehaviour
     public isVisableTest DataVisComicIntro;
     public isVisableTest FinalComicIntro;
 
+    public GameObject bigCityDoom;
+    public GameObject bigCityJogger;
+    public GameObject bigCityData;
+    public GameObject bigCityFinal;
+
     public float DoomScrollingDuration;
     //Jogging scene is not based on timer, but rather completion of series of events
     public float DataVisDuration;
@@ -105,7 +110,6 @@ public class TotalExperienceManager : MonoBehaviour
                     state = 5;
                     JoggingComicIntro.startSequence();
                     JoggingParent.SetActive(true);
-                    JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 }
                 break;
             case 5:
@@ -116,6 +120,7 @@ public class TotalExperienceManager : MonoBehaviour
                 if (DataVisComicIntro.shouldSequenceStart())
                 {
                     state = 7;
+                    DataVisParent.SetActive(true);
                     DataVisComicIntro.startSequence();
                     DataVisPathManager.showPrePaths();
                     timer = DataVisDuration;
@@ -133,7 +138,7 @@ public class TotalExperienceManager : MonoBehaviour
             case 8:
                 if(timer < 0f)
                 {
-                    DataVisParent.SetActive(true);
+                    DataVisParent.SetActive(false);
                     state = 9;
                     timer = 0f;
                 }
@@ -166,16 +171,22 @@ public class TotalExperienceManager : MonoBehaviour
             if(state == 2 || state == 3)
             {
                 //Zone 1 has been entered and the experience can move from doom to jogging
+                JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 DoomParent.SetActive(false);
                 state = 4;
+                bigCityDoom.SetActive(false);
+                bigCityJogger.SetActive(true);
             }
         }
         if(id == 2)
         {
             if(state == 5)
             {
-                DoomParent.SetActive(false);
+                DataVisComicIntro.GetComponent<MeshRenderer>().enabled = true;
+                JoggingParent.SetActive(false);
                 state = 6;
+                bigCityJogger.SetActive(false);
+                bigCityData.SetActive(true);
             }
         }
         if(id == 3)
@@ -184,6 +195,8 @@ public class TotalExperienceManager : MonoBehaviour
             {
                 DataVisParent.SetActive(false);
                 state = 10;
+                bigCityData.SetActive(false);
+                bigCityFinal.SetActive(true);
             }
         }
     }
