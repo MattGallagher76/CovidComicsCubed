@@ -56,8 +56,8 @@ public class NewPageGenerator : MonoBehaviour
     void Start()
     {
         previousPos = transform.position;
-        goodComics = Resources.LoadAll<Texture2D>("GoodComics");
-        badComics = Resources.LoadAll<Texture2D>("BadComics");
+        goodComics = Resources.LoadAll<Texture2D>("NewGoodComics");
+        badComics = Resources.LoadAll<Texture2D>("NewBadComics");
         //Debug.Log("Good: " + goodComics.Length + ", Bad: " + badComics.Length);
 
         createGoodPoints(1);
@@ -76,9 +76,9 @@ public class NewPageGenerator : MonoBehaviour
             for (float th = -theta / 2; th < theta / 2; th += (thetaStepBad * thetaSmoothing.Evaluate((th + (theta / 2)) / theta)))
             {
                 float r = UnityEngine.Random.Range(rMinNoise, rMaxNoise) * radiusScaleFactor;
-                Vector3 t = new Vector3(1.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th + 180) * Mathf.Deg2Rad),
+                Vector3 t = new Vector3(1.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th + 90) * Mathf.Deg2Rad),
                     2 * r * Mathf.Cos(phi * Mathf.Deg2Rad),
-                    2.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 180) * Mathf.Deg2Rad));
+                    2.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 90) * Mathf.Deg2Rad));
                 t *= transform.localScale.x;
                 t += transform.position;
                 badComicLocations.Insert(i, t);
@@ -103,9 +103,9 @@ public class NewPageGenerator : MonoBehaviour
             for (float th = -theta / 2; th < theta / 2; th += (thetaStepGood * thetaSmoothing.Evaluate((th + (theta / 2)) / theta)))
             {
                 float r = UnityEngine.Random.Range(rMinGood, rMaxGood) * radiusScaleFactor;
-                Vector3 t = new Vector3(1.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th + 180) * Mathf.Deg2Rad),
+                Vector3 t = new Vector3(1.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Cos((th + 90) * Mathf.Deg2Rad),
                     2 * r * Mathf.Cos(phi * Mathf.Deg2Rad),
-                    2.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 180) * Mathf.Deg2Rad));
+                    2.5f * r * Mathf.Sin(phi * Mathf.Deg2Rad) * Mathf.Sin((th + 90) * Mathf.Deg2Rad));
                 t *= transform.localScale.x;
                 t += transform.position;
 

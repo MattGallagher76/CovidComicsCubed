@@ -10,9 +10,16 @@ public class globeSpinTest : MonoBehaviour
     public ActiveStateSelector[] swipePoses;
     public ActiveStateSelector[] pokePoses;
 
-    public GameObject[] hands;
+    public GameObject leftHand;
+    public GameObject rightHand;
 
-    public Material oculusHandLeft;
+    public Material LeftHandReference;
+    public Material RightHandReference;
+    public Color oculusHandDefault;
+    public Color oculusHandPoke;
+    public Color oculusHandSwipe;
+
+    private string OutlineColorProperty = "_OutlineColor";
 
     public float spinSpeed = 10f; // Adjust spin speed as necessary
     public string handTag = "hand"; // Local variable for the hand tag
@@ -30,12 +37,33 @@ public class globeSpinTest : MonoBehaviour
 
     float timer = 0f;
 
+    //0 Is open hand
+    //1 Is Poke/Tap
+    //2 Is Swipe
+    int leftHandState = 0;
+    int rightHandState = 0;
+
     void Start()
     {
         //hands[0].GetComponent<Renderer>().material.co
         rb = GetComponent<Rigidbody>();
+        swipePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandSwipe);
+        swipePoses[1].WhenSelected += () => setHandColor(RightHandReference, oculusHandSwipe);
+        swipePoses[0].WhenUnselected += () => setHandColor(LeftHandReference, oculusHandDefault);
+        swipePoses[1].WhenUnselected += () => setHandColor(RightHandReference, oculusHandDefault);
+        pokePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandPoke);
+        pokePoses[1].WhenSelected += () => setHandColor(RightHandReference, oculusHandPoke);
+        pokePoses[0].WhenUnselected += () => setHandColor(LeftHandReference, oculusHandDefault);
+        pokePoses[1].WhenUnselected += () => setHandColor(RightHandReference, oculusHandDefault);
+
+        Debug.Log("Left: " + leftHand.GetInstanceID());
+        Debug.Log("Right: " + rightHand.GetInstanceID());
     }
 
+    public void setHandColor(Material hand, Color c)
+    {
+        hand.SetColor(OutlineColorProperty, c);
+    }
 
 
     private void Update()

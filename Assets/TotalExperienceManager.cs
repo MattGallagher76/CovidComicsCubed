@@ -68,7 +68,6 @@ public class TotalExperienceManager : MonoBehaviour
     {
         if (timer > 0f)
             timer -= Time.deltaTime;
-        Debug.Log("Current State: " + state);
         switch (state)
         {
             case 0:
@@ -81,6 +80,7 @@ public class TotalExperienceManager : MonoBehaviour
                     DoomParent.SetActive(true);
                     timer = DoomScrollingDuration;
                     state = 1;
+                    Debug.Log("Current State: " + state);
                 }
                 break;
             case 1:
@@ -90,6 +90,7 @@ public class TotalExperienceManager : MonoBehaviour
                     DoomScrollingPathManager.showPostPaths();
                     DoomScrollingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                     state = 2;
+                    Debug.Log("Current State: " + state);
                 }
                 break;
             case 2:
@@ -98,6 +99,7 @@ public class TotalExperienceManager : MonoBehaviour
                     DoomParent.SetActive(false);
                     timer = 0f;
                     state = 3;
+                    Debug.Log("Current State: " + state);
                 }
                 break;
             case 3:
@@ -109,6 +111,7 @@ public class TotalExperienceManager : MonoBehaviour
                 if(JoggingComicIntro.shouldSequenceStart())
                 {
                     state = 5;
+                    Debug.Log("Current State: " + state);
                     JoggingComicIntro.startSequence();
                     JoggingParent.SetActive(true);
                 }
@@ -121,6 +124,7 @@ public class TotalExperienceManager : MonoBehaviour
                 if (DataVisComicIntro.shouldSequenceStart())
                 {
                     state = 7;
+                    Debug.Log("Current State: " + state);
                     DataVisParent.SetActive(true);
                     DataVisComicIntro.startSequence();
                     DataVisPathManager.showPrePaths();
@@ -133,6 +137,7 @@ public class TotalExperienceManager : MonoBehaviour
                     DataVisPathManager.showPostPaths();
                     timer = urgeDuration;
                     state = 8;
+                    Debug.Log("Current State: " + state);
                     DataVisComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 }
                 break;
@@ -141,6 +146,7 @@ public class TotalExperienceManager : MonoBehaviour
                 {
                     DataVisParent.SetActive(false);
                     state = 9;
+                    Debug.Log("Current State: " + state);
                     timer = 0f;
                 }
                 break;
@@ -152,6 +158,7 @@ public class TotalExperienceManager : MonoBehaviour
                 FinalComicIntro.startSequence();
                 timer = 8f;
                 state = 11;
+                Debug.Log("Current State: " + state);
                 break;
             case 11:
                 if(timer < 0f)
@@ -175,6 +182,7 @@ public class TotalExperienceManager : MonoBehaviour
                 JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 DoomParent.SetActive(false);
                 state = 4;
+                Debug.Log("Current State: " + state);
                 bigCityDoom.SetActive(false);
                 bigCityJogger.SetActive(true);
             }
@@ -186,6 +194,7 @@ public class TotalExperienceManager : MonoBehaviour
                 DataVisComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 JoggingParent.SetActive(false);
                 state = 6;
+                Debug.Log("Current State: " + state);
                 bigCityJogger.SetActive(false);
                 bigCityData.SetActive(true);
             }
@@ -196,6 +205,7 @@ public class TotalExperienceManager : MonoBehaviour
             {
                 DataVisParent.SetActive(false);
                 state = 10;
+                Debug.Log("Current State: " + state);
                 bigCityData.SetActive(false);
                 bigCityFinal.SetActive(true);
             }
