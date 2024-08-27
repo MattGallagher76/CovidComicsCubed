@@ -10,6 +10,7 @@ public class TotalExperienceManager : MonoBehaviour
     public GuidePathManager DataVisPathManager;
 
     public GameObject DoomParent;
+    public GameObject DoomPageParent;
     public GameObject JoggingParent;
     public GameObject DataVisParent;
 

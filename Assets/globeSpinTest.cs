@@ -1,3 +1,4 @@
+using Oculus.Interaction;
 using Oculus.Platform;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +6,14 @@ using UnityEngine;
 
 public class globeSpinTest : MonoBehaviour
 {
+    //Left is 0, Right is 1
+    public ActiveStateSelector[] swipePoses;
+    public ActiveStateSelector[] pokePoses;
+
+    public GameObject[] hands;
+
+    public Material oculusHandLeft;
+
     public float spinSpeed = 10f; // Adjust spin speed as necessary
     public string handTag = "hand"; // Local variable for the hand tag
     private Rigidbody rb;
@@ -23,8 +32,11 @@ public class globeSpinTest : MonoBehaviour
 
     void Start()
     {
+        //hands[0].GetComponent<Renderer>().material.co
         rb = GetComponent<Rigidbody>();
     }
+
+
 
     private void Update()
     {

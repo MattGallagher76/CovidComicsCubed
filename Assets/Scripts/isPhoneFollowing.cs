@@ -27,13 +27,10 @@ public class isPhoneFollowing : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void hidePhone()
     {
-        if (other.tag.Equals("MainCamera"))
-        {
-            StartCoroutine(scaleDownPhone());
-            fpn.setIsInRoom(false);
-        }
+        StartCoroutine(scaleDownPhone());
+        fpn.setIsInRoom(false);
     }
 
     IEnumerator scaleUpPhone()
