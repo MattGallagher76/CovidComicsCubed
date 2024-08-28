@@ -16,6 +16,9 @@ public class CovidEmotionMeasurement : MonoBehaviour
     public Renderer r;
     public TMPro.TextMeshPro textBox;
 
+    public GameObject shocked;
+    public GameObject angry;
+
     [Range(0, 1f)]
     public float alpha;
 
@@ -46,15 +49,18 @@ public class CovidEmotionMeasurement : MonoBehaviour
     {
         if(emotionValue <= maximumEmotionValue / 3f)
         {
-            textBox.text = "";
+            shocked.SetActive(false);
+            angry.SetActive(false);
         }
         else if(emotionValue <= maximumEmotionValue * 2 / 3f)
         {
-            textBox.text = "?";
+            shocked.SetActive(true);
+            angry.SetActive(false);
         }
         else
         {
-            textBox.text = "!";
+            shocked.SetActive(false);
+            angry.SetActive(true);
         }
     }
 

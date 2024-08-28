@@ -128,7 +128,7 @@ namespace PathCreation.Examples
                         shimmy(mirrorTarget.position);
                         transform.LookAt(playerRef.transform.position);
                         transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
-                        if (GetComponent<CovidEmotionMeasurement>().getEV() < GetComponent<CovidEmotionMeasurement>().maximumEmotionValue / 2f)
+                        if (true || GetComponent<CovidEmotionMeasurement>().getEV() < GetComponent<CovidEmotionMeasurement>().maximumEmotionValue / 2f)
                         {
                             shuffleTimer -= Time.deltaTime;
                             //angryDebug.SetActive(false);

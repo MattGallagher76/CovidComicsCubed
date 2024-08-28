@@ -47,22 +47,25 @@ public class globeSpinTest : MonoBehaviour
     {
         //hands[0].GetComponent<Renderer>().material.co
         rb = GetComponent<Rigidbody>();
-        swipePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandSwipe);
-        swipePoses[1].WhenSelected += () => setHandColor(RightHandReference, oculusHandSwipe);
-        swipePoses[0].WhenUnselected += () => setHandColor(LeftHandReference, oculusHandDefault);
-        swipePoses[1].WhenUnselected += () => setHandColor(RightHandReference, oculusHandDefault);
-        pokePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandPoke);
-        pokePoses[1].WhenSelected += () => setHandColor(RightHandReference, oculusHandPoke);
-        pokePoses[0].WhenUnselected += () => setHandColor(LeftHandReference, oculusHandDefault);
-        pokePoses[1].WhenUnselected += () => setHandColor(RightHandReference, oculusHandDefault);
-
-        Debug.Log("Left: " + leftHand.GetInstanceID());
-        Debug.Log("Right: " + rightHand.GetInstanceID());
+        swipePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandSwipe, 0, 2);
+        swipePoses[1].WhenSelected += () => setHandColor(RightHandReference, oculusHandSwipe, 1, 2);
+        swipePoses[0].WhenUnselected += () => setHandColor(LeftHandReference, oculusHandDefault, 0, 0);
+        swipePoses[1].WhenUnselected += () => setHandColor(RightHandReference, oculusHandDefault, 1, 0);
+        pokePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandPoke, 0, 1);
+        pokePoses[1].WhenSelected += () => setHandColor(RightHandReference, oculusHandPoke, 1, 1);
+        pokePoses[0].WhenUnselected += () => setHandColor(LeftHandReference, oculusHandDefault, 0, 0);
+        pokePoses[1].WhenUnselected += () => setHandColor(RightHandReference, oculusHandDefault, 1, 0);
     }
 
-    public void setHandColor(Material hand, Color c)
+    //0 is left
+    //1 is right
+    public void setHandColor(Material hand, Color c, int handID, int newState)
     {
         hand.SetColor(OutlineColorProperty, c);
+        if (handID == 0)
+            leftHandState = newState;
+        else if (handID == 1)
+            rightHandState = newState;
     }
 
 

@@ -36,6 +36,8 @@ public class DataSetSelector : MonoBehaviour
 
     Material defaultMaterial;
 
+    public GameObject meshBuddy;
+
     public void initHands()
     {
         hands = GameObject.FindGameObjectsWithTag(handTag);
@@ -134,8 +136,8 @@ public class DataSetSelector : MonoBehaviour
 
     public void graphData()
     {
-        defaultMaterial = GetComponent<Renderer>().material;
-        GetComponent<Renderer>().material = FindObjectOfType<dataManager>().selectedCountry;
+        defaultMaterial = meshBuddy.GetComponent<Renderer>().material;
+        meshBuddy.GetComponent<Renderer>().material = FindObjectOfType<dataManager>().selectedCountry;
         dm.graph(this);
         /*
         localGraphLine = Instantiate(graphLine);
@@ -197,17 +199,20 @@ public class DataSetSelector : MonoBehaviour
             graph = false;
             graphData();
         }
-
+        /*
         float dist = Mathf.Min(Vector3.Distance(hands[0].transform.position, transform.position), 
                                Vector3.Distance(hands[1].transform.position, transform.position));
         if (dist < 1f)
         {
+            if (countryName.ToLower().Equals("canada"))
+                Debug.Log("Dist: " + dist + " - Scale: " + ac.Evaluate(dist / 1f) * -0.0024499f + 0.018f);
             transform.parent.localScale = Vector3.one * (ac.Evaluate(dist / 1f) * -0.0024499f + 0.018f);
         }
         else
         {
             transform.parent.localScale = Vector3.one * 0.0155501f;
         }
+        */
 
         /*
         if (!isOnGlobe)
