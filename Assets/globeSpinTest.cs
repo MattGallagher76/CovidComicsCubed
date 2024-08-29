@@ -24,24 +24,21 @@ public class globeSpinTest : MonoBehaviour
     public float spinSpeed = 10f; // Adjust spin speed as necessary
     public string handTag = "hand"; // Local variable for the hand tag
     private Rigidbody rb;
-    private Dictionary<int, Vector3> handPositions = new Dictionary<int, Vector3>();
-    private Dictionary<int, Vector3> lastHandPositions = new Dictionary<int, Vector3>();
+    private Vector3 handPositions;
+    private Vector3 lastHandPositions;
 
-    bool isSwipe = false;
-    bool isInside = false;
-    public float swipeTimer; //Duration in which the hand must move before to indicate a swipe
-    public float minimumDistanceToSwipe;
     public DataSetSelector currentDss;
 
     Vector3 enteredPosition;
-
-    float timer = 0f;
 
     //0 Is open hand
     //1 Is Poke/Tap
     //2 Is Swipe
     int leftHandState = 0;
     int rightHandState = 0;
+
+    int activeHandID = 0;
+    int activeHandState = -1;
 
     void Start()
     {
@@ -72,38 +69,23 @@ public class globeSpinTest : MonoBehaviour
     private void Update()
     {
 
-        if (timer > 0)
-        {
-            timer -= Time.deltaTime;
-        }
-        else
-        {
-            if (isInside)
-            {
-                isSwipe = true;
-                //Debug.Log("Timer based Swipe Start");
-            }
-        }
-        /*
-        if(transform.localEulerAngles.x != 0 || transform.localEulerAngles.z != 0)
-        {
-            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y, 0f);
-        }*/
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(handTag))
         {
-            timer = swipeTimer;
-            isInside = true;
-            enteredPosition = other.gameObject.transform.position;
-            int handID = other.gameObject.GetInstanceID();
-            if (!handPositions.ContainsKey(handID))
+            if(activeHandID == 0)
             {
-                handPositions.Add(handID, other.transform.position);
-                lastHandPositions.Add(handID, other.transform.position);
-                //Debug.Log("Hand entered trigger. Position: " + other.transform.position);
+                if (other.gameObject.GetInstanceID() == leftHand.GetInstanceID())
+                {
+                    activeHandState = leftHandState;
+                }
+                else
+                {
+                    activeHandState = rightHandState;
+                }
+                activeHandID = other.gameObject.GetInstanceID();
             }
         }
     }
@@ -112,44 +94,21 @@ public class globeSpinTest : MonoBehaviour
     {
         if (other.CompareTag(handTag))
         {
-            if(isSwipe)
-            {
-                Debug.Log("Was a swipe");
-                timer = 0f;
-                isInside = false;
-                isSwipe = false;
-            }
-            else
-            {
-                if(timer > 0)
-                {
-                    Debug.Log("Was a tap");
-                    timer = 0;
-                    isInside = false;
-                    closestDss(other.gameObject.GetInstanceID()).GetComponent<DataSetSelector>().graphData();
-                }
-                isInside = false;
-                isSwipe = false;
-            }
-            int handID = other.gameObject.GetInstanceID();
-            if (handPositions.ContainsKey(handID))
-            {
-                handPositions.Remove(handID);
-                lastHandPositions.Remove(handID);
-                //Debug.Log("Hand exited trigger.");
-            }
+            activeHandID = 0;
+            activeHandState = -1;
         }
+        //closestDss(other.gameObject.GetInstanceID()).GetComponent<DataSetSelector>().graphData();
     }
 
-    GameObject closestDss(int handId)
+    GameObject closestDss(Vector3 handPos)
     {
         float dist = 1000f;
         GameObject closest = null;
         foreach (DataSetSelector dss in FindObjectsOfType<DataSetSelector>())
         {
-            if(Vector3.Distance(dss.gameObject.transform.position, lastHandPositions[handId]) < dist)
+            if(Vector3.Distance(dss.gameObject.transform.position, handPos) < dist)
             {
-                dist = Vector3.Distance(dss.gameObject.transform.position, lastHandPositions[handId]);
+                dist = Vector3.Distance(dss.gameObject.transform.position, handPos);
                 closest = dss.gameObject;
             }
         }
@@ -160,7 +119,15 @@ public class globeSpinTest : MonoBehaviour
     {
         if (other.CompareTag(handTag))
         {
-            int handID = other.gameObject.GetInstanceID();
+            if(other.gameObject.GetInstanceID() == activeHandID)
+            { 
+            }
+        }
+    }
+}
+
+/*
+ * int handID = other.gameObject.GetInstanceID();
             Vector3 currentHandPosition = other.transform.position;
 
             //Debug.Log(Vector3.Distance(enteredPosition, currentHandPosition));
@@ -193,6 +160,4 @@ public class globeSpinTest : MonoBehaviour
                     lastHandPositions[handID] = currentHandPosition;
                 }
             }
-        }
-    }
-}
+ */
