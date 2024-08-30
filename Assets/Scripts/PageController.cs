@@ -59,9 +59,9 @@ namespace PathCreation.Examples
             }
         }
 
-        public void pageCreation(Vector3[] points, GameObject lookAtTarget)
+        public void pageCreation(Vector3[] points, GameObject lookAtTarget, GameObject pageParent)
         {
-            transform.parent = null;
+            transform.parent = pageParent.transform;
             transform.position = Vector3.zero;
             page.transform.localEulerAngles = transform.localEulerAngles;
             transform.localEulerAngles = Vector3.zero;

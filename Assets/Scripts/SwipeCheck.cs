@@ -43,6 +43,8 @@ public class SwipeCheck : MonoBehaviour
 
     public bool swipeStart;
 
+    public GameObject pageParent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -162,7 +164,7 @@ public class SwipeCheck : MonoBehaviour
                 Vector3 v3 = pg.generateEndLocation(currentPage.GetComponent<PathCreation.Examples.PageController>().isGood);
                 Vector3 v2 = (v1 * 2 + v3) / 3f;
                 v2 = new Vector3(v2.x, v2.y + 0.3f, v2.z);
-                currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 }, this.gameObject);
+                currentPage.GetComponent<PathCreation.Examples.PageController>().pageCreation(new Vector3[] { v1, v2, v3, v3 }, this.gameObject, pageParent);
 
                 currentPage = nextPage;
                 nextPage.transform.localPosition = Vector3.zero;

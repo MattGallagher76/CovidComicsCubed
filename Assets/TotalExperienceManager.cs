@@ -78,6 +78,7 @@ public class TotalExperienceManager : MonoBehaviour
                     DoomScrollingComicIntro.startSequence();
                     DoomScrollingPathManager.showPrePaths();
                     DoomParent.SetActive(true);
+                    DoomPageParent.SetActive(true);
                     timer = DoomScrollingDuration;
                     state = 1;
                     Debug.Log("Current State: " + state);
@@ -97,6 +98,7 @@ public class TotalExperienceManager : MonoBehaviour
                 if(timer <= 0f)
                 {
                     DoomParent.SetActive(false);
+                    DoomPageParent.SetActive(false);
                     timer = 0f;
                     state = 3;
                     Debug.Log("Current State: " + state);
@@ -181,6 +183,7 @@ public class TotalExperienceManager : MonoBehaviour
                 //Zone 1 has been entered and the experience can move from doom to jogging
                 JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 DoomParent.SetActive(false);
+                DoomPageParent.SetActive(false);
                 state = 4;
                 Debug.Log("Current State: " + state);
                 bigCityDoom.SetActive(false);

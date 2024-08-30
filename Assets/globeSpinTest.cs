@@ -80,10 +80,12 @@ public class globeSpinTest : MonoBehaviour
                 if (other.gameObject.GetInstanceID() == leftHand.GetInstanceID())
                 {
                     activeHandState = leftHandState;
+                    lastHandPositions = leftHand.transform.position;
                 }
                 else
                 {
                     activeHandState = rightHandState;
+                    lastHandPositions = rightHand.transform.position;
                 }
                 activeHandID = other.gameObject.GetInstanceID();
             }
@@ -94,10 +96,13 @@ public class globeSpinTest : MonoBehaviour
     {
         if (other.CompareTag(handTag))
         {
-            activeHandID = 0;
-            activeHandState = -1;
+            if(other.gameObject.GetInstanceID() == activeHandID)
+            {
+                activeHandID = 0;
+                activeHandState = -1;
+                closestDss((activeHandID == leftHand.GetInstanceID() ? leftHand : rightHand).transform.position).GetComponent<DataSetSelector>().graphData();
+            }
         }
-        //closestDss(other.gameObject.GetInstanceID()).GetComponent<DataSetSelector>().graphData();
     }
 
     GameObject closestDss(Vector3 handPos)
@@ -121,6 +126,16 @@ public class globeSpinTest : MonoBehaviour
         {
             if(other.gameObject.GetInstanceID() == activeHandID)
             { 
+                Vector3 currentHandPosition = ((leftHand.GetInstanceID() == activeHandID) ? leftHand : rightHand).transform.position;
+                Vector3 direction = currentHandPosition - lastHandPositions;
+
+                direction = new Vector3(0, 0, -1f * direction.z);
+
+                Vector3 torque = Vector3.Cross(direction, Vector3.right) * spinSpeed;
+                rb.AddTorque(torque, ForceMode.VelocityChange); // Apply negative torque to reverse the direction
+
+                // Update the hand positions
+                lastHandPositions = currentHandPosition;
             }
         }
     }
