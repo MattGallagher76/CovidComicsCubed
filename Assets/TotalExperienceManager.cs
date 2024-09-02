@@ -9,6 +9,8 @@ public class TotalExperienceManager : MonoBehaviour
     //public GuidePathManager JoggingPathManager;
     public GuidePathManager DataVisPathManager;
 
+    public GameObject[] doomRings;
+
     public GameObject DoomParent;
     public GameObject DoomPageParent;
     public GameObject JoggingParent;
@@ -28,7 +30,8 @@ public class TotalExperienceManager : MonoBehaviour
     //Jogging scene is not based on timer, but rather completion of series of events
     public float DataVisDuration;
 
-    public float urgeDuration;
+    public float DoomUrgeDuration;
+    public float DataUrgeDuration;
 
     public int state = 0;
 
@@ -87,7 +90,7 @@ public class TotalExperienceManager : MonoBehaviour
             case 1:
                 if (timer <= 0f)
                 {
-                    timer = urgeDuration;
+                    timer = DoomUrgeDuration;
                     DoomScrollingPathManager.showPostPaths();
                     DoomScrollingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                     state = 2;
@@ -98,6 +101,10 @@ public class TotalExperienceManager : MonoBehaviour
                 if(timer <= 0f)
                 {
                     DoomParent.SetActive(false);
+                    foreach(GameObject gb in doomRings)
+                    {
+                        gb.SetActive(false);
+                    }
                     DoomPageParent.SetActive(false);
                     timer = 0f;
                     state = 3;
@@ -137,7 +144,7 @@ public class TotalExperienceManager : MonoBehaviour
                 if(timer < 0f)
                 {
                     DataVisPathManager.showPostPaths();
-                    timer = urgeDuration;
+                    timer = DataUrgeDuration;
                     state = 8;
                     Debug.Log("Current State: " + state);
                     DataVisComicIntro.GetComponent<MeshRenderer>().enabled = true;
@@ -183,6 +190,10 @@ public class TotalExperienceManager : MonoBehaviour
                 //Zone 1 has been entered and the experience can move from doom to jogging
                 JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 DoomParent.SetActive(false);
+                foreach (GameObject gb in doomRings)
+                {
+                    gb.SetActive(false);
+                }
                 DoomPageParent.SetActive(false);
                 state = 4;
                 Debug.Log("Current State: " + state);

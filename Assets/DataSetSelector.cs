@@ -183,7 +183,7 @@ public class DataSetSelector : MonoBehaviour
     {
         //Destroy(localGraphLine);
         FindObjectOfType<WindowGraph>().clearGraph();
-        GetComponent<Renderer>().material = defaultMaterial;
+        meshBuddy.GetComponent<Renderer>().material = defaultMaterial;
     }
 
     public void setName(string n)

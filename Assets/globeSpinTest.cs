@@ -99,6 +99,10 @@ public class globeSpinTest : MonoBehaviour
                     lastHandPositions = rightHand.transform.position;
                 }
                 activeHandID = other.gameObject.GetInstanceID();
+                if(activeHandState == 1)
+                {
+                    closestDss((activeHandID == leftHand.GetInstanceID() ? leftHand : rightHand).transform.position).GetComponent<DataSetSelector>().graphData();
+                }
             }
         }
     }
@@ -107,12 +111,10 @@ public class globeSpinTest : MonoBehaviour
     {
         if (other.CompareTag(handTag))
         {
-            Debug.Log("ID: " + other.gameObject.GetInstanceID() + ", Correct ID: " + activeHandID + ", State: " + activeHandState);
             if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 1)
             {
                 activeHandID = 0;
                 activeHandState = -1;
-                closestDss((activeHandID == leftHand.GetInstanceID() ? leftHand : rightHand).transform.position).GetComponent<DataSetSelector>().graphData();
             }
         }
     }
