@@ -68,7 +68,18 @@ public class globeSpinTest : MonoBehaviour
 
     private void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            setHandColor(LeftHandReference, oculusHandDefault, 0, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            setHandColor(LeftHandReference, oculusHandPoke, 0, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            setHandColor(LeftHandReference, oculusHandSwipe, 0, 2);
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -96,7 +107,8 @@ public class globeSpinTest : MonoBehaviour
     {
         if (other.CompareTag(handTag))
         {
-            if(other.gameObject.GetInstanceID() == activeHandID)
+            Debug.Log("ID: " + other.gameObject.GetInstanceID() + ", Correct ID: " + activeHandID + ", State: " + activeHandState);
+            if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 1)
             {
                 activeHandID = 0;
                 activeHandState = -1;
@@ -122,9 +134,10 @@ public class globeSpinTest : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        /*
         if (other.CompareTag(handTag))
         {
-            if(other.gameObject.GetInstanceID() == activeHandID)
+            if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 2)
             { 
                 Vector3 currentHandPosition = ((leftHand.GetInstanceID() == activeHandID) ? leftHand : rightHand).transform.position;
                 Vector3 direction = currentHandPosition - lastHandPositions;
@@ -138,6 +151,7 @@ public class globeSpinTest : MonoBehaviour
                 lastHandPositions = currentHandPosition;
             }
         }
+        */
     }
 }
 
