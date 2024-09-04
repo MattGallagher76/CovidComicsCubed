@@ -40,6 +40,9 @@ public class globeSpinTest : MonoBehaviour
     int activeHandID = 0;
     int activeHandState = -1;
 
+    public HandGuide hgPoke;
+    public HandGuide hgSwipe;
+
     void Start()
     {
         //hands[0].GetComponent<Renderer>().material.co
@@ -101,6 +104,7 @@ public class globeSpinTest : MonoBehaviour
                 activeHandID = other.gameObject.GetInstanceID();
                 if(activeHandState == 1)
                 {
+                    hgPoke.endSequence();
                     closestDss((activeHandID == leftHand.GetInstanceID() ? leftHand : rightHand).transform.position).GetComponent<DataSetSelector>().graphData();
                 }
             }
@@ -139,7 +143,8 @@ public class globeSpinTest : MonoBehaviour
         if (other.CompareTag(handTag))
         {
             if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 2)
-            { 
+            {
+                hgSwipe.endSequence();
                 Vector3 currentHandPosition = ((leftHand.GetInstanceID() == activeHandID) ? leftHand : rightHand).transform.position;
                 Vector3 direction = currentHandPosition - lastHandPositions;
 

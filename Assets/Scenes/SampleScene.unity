@@ -5428,6 +5428,8 @@ MonoBehaviour:
   spinSpeed: 10
   handTag: HandSphere
   currentDss: {fileID: 0}
+  hgPoke: {fileID: 1434066237}
+  hgSwipe: {fileID: 999859395}
 --- !u!114 &738151847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7106,6 +7108,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3624945073074046378, guid: d9f911bd195e53343bbc4293c1c9c988, type: 3}
   m_PrefabInstance: {fileID: 999859393}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &999859395 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8009016449482568421, guid: d9f911bd195e53343bbc4293c1c9c988, type: 3}
+  m_PrefabInstance: {fileID: 999859393}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 430290c5af898864eb4ef4c59ce3b40f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1006924776
 GameObject:
   m_ObjectHideFlags: 0
@@ -10241,6 +10254,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3624945073074046378, guid: d9f911bd195e53343bbc4293c1c9c988, type: 3}
   m_PrefabInstance: {fileID: 1434066235}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1434066237 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8009016449482568421, guid: d9f911bd195e53343bbc4293c1c9c988, type: 3}
+  m_PrefabInstance: {fileID: 1434066235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 430290c5af898864eb4ef4c59ce3b40f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1442169476
 GameObject:
   m_ObjectHideFlags: 0
@@ -12049,6 +12073,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34ef60d66964a684bb666857751d471d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hg1: {fileID: 1434066237}
+  hg2: {fileID: 999859395}
   DoomScrollingPathManager: {fileID: 810110668}
   DataVisPathManager: {fileID: 1509924038}
   doomRings:
@@ -12072,8 +12098,8 @@ MonoBehaviour:
   DataVisDuration: 30
   DoomUrgeDuration: 30
   DataUrgeDuration: 180
-  DoomZoneCollider: {fileID: 0}
-  DataZoneCollider: {fileID: 0}
+  DoomZoneCollider: {fileID: 425180430}
+  DataZoneCollider: {fileID: 1821057461}
   state: 0
 --- !u!4 &1587102492
 Transform:
@@ -13806,8 +13832,8 @@ MonoBehaviour:
   magnitudeMinimum: 0
   swipeStart: 0
   pageParent: {fileID: 1043951118}
-  hg: {fileID: 0}
-  AudS: {fileID: 0}
+  hg: {fileID: 3016968199536967774}
+  AudS: {fileID: 1590284279}
 --- !u!54 &1823609477
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15728,7 +15754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2039374510
 Transform:
   m_ObjectHideFlags: 0
@@ -16662,6 +16688,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9f911bd195e53343bbc4293c1c9c988, type: 3}
+--- !u!114 &3016968199536967774 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8009016449482568421, guid: d9f911bd195e53343bbc4293c1c9c988, type: 3}
+  m_PrefabInstance: {fileID: 3016968199536967773}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 430290c5af898864eb4ef4c59ce3b40f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3292438304191049969
 PrefabInstance:
   m_ObjectHideFlags: 0

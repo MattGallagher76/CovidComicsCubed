@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TotalExperienceManager : MonoBehaviour
 {
+    public HandGuide hg1;
+    public HandGuide hg2;
+
     public GuidePathManager DoomScrollingPathManager;
     //Jogging scene doesn't need a path
     //public GuidePathManager JoggingPathManager;
@@ -147,6 +150,8 @@ public class TotalExperienceManager : MonoBehaviour
                 {
                     state = 7;
                     Debug.Log("Current State: " + state);
+                    hg1.startSequenceExt();
+                    hg2.startSequenceExt();
                     DataVisParent.SetActive(true);
                     DataVisComicIntro.startSequence();
                     DataVisPathManager.showPrePaths();
