@@ -136,7 +136,6 @@ public class globeSpinTest : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        /*
         if (other.CompareTag(handTag))
         {
             if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 2)
@@ -153,7 +152,6 @@ public class globeSpinTest : MonoBehaviour
                 lastHandPositions = currentHandPosition;
             }
         }
-        */
     }
 }
 

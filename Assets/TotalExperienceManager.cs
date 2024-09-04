@@ -16,6 +16,11 @@ public class TotalExperienceManager : MonoBehaviour
     public GameObject JoggingParent;
     public GameObject DataVisParent;
 
+    public GameObject DoomStencilMask;
+    Animator doomStencilAnimator;
+    public GameObject JoggerStencilMask;
+    Animator joggerStencilAnimator;
+
     public isVisableTest DoomScrollingComicIntro;
     public isVisableTest JoggingComicIntro;
     public isVisableTest DataVisComicIntro;
@@ -32,6 +37,9 @@ public class TotalExperienceManager : MonoBehaviour
 
     public float DoomUrgeDuration;
     public float DataUrgeDuration;
+
+    public GameObject DoomZoneCollider;
+    public GameObject DataZoneCollider;
 
     public int state = 0;
 
@@ -63,8 +71,10 @@ public class TotalExperienceManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //DoomScrollingPathManager.hidePathsOnStart();
+        doomStencilAnimator = DoomStencilMask.GetComponent<Animator>();
+        //joggerStencilAnimator = JoggerStencilMask.GetComponent<Animator>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -91,6 +101,7 @@ public class TotalExperienceManager : MonoBehaviour
                 if (timer <= 0f)
                 {
                     timer = DoomUrgeDuration;
+                    DoomZoneCollider.GetComponent<AudioSource>().Play();
                     DoomScrollingPathManager.showPostPaths();
                     DoomScrollingComicIntro.GetComponent<MeshRenderer>().enabled = true;
                     state = 2;
@@ -100,12 +111,14 @@ public class TotalExperienceManager : MonoBehaviour
             case 2:
                 if(timer <= 0f)
                 {
-                    DoomParent.SetActive(false);
+                    //DoomParent.SetActive(false);
+                    DoomZoneCollider.GetComponent<AudioSource>().Play();
+                    doomStencilAnimator.SetBool("SceneEnd", true);
                     foreach(GameObject gb in doomRings)
                     {
                         gb.SetActive(false);
                     }
-                    DoomPageParent.SetActive(false);
+                    //DoomPageParent.SetActive(false);
                     timer = 0f;
                     state = 3;
                     Debug.Log("Current State: " + state);
@@ -143,6 +156,7 @@ public class TotalExperienceManager : MonoBehaviour
             case 7:
                 if(timer < 0f)
                 {
+                    DataZoneCollider.GetComponent<AudioSource>().Play();
                     DataVisPathManager.showPostPaths();
                     timer = DataUrgeDuration;
                     state = 8;
@@ -153,6 +167,7 @@ public class TotalExperienceManager : MonoBehaviour
             case 8:
                 if(timer < 0f)
                 {
+                    DataZoneCollider.GetComponent<AudioSource>().Play();
                     DataVisParent.SetActive(false);
                     state = 9;
                     Debug.Log("Current State: " + state);
@@ -189,7 +204,8 @@ public class TotalExperienceManager : MonoBehaviour
             {
                 //Zone 1 has been entered and the experience can move from doom to jogging
                 JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
-                DoomParent.SetActive(false);
+                doomStencilAnimator.SetBool("SceneEnd", true);
+                //DoomParent.SetActive(false);
                 foreach (GameObject gb in doomRings)
                 {
                     gb.SetActive(false);

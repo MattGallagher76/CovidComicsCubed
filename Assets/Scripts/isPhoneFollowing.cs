@@ -10,6 +10,8 @@ public class isPhoneFollowing : MonoBehaviour
 
     private Vector3 initialScale;
     public AnimationCurve scaleCurve;
+
+    public HandGuide hg;
     // Start is called before the first frame 
 
     private void Start()
@@ -23,6 +25,7 @@ public class isPhoneFollowing : MonoBehaviour
         if (other.tag.Equals("MainCamera"))
         {
             StartCoroutine(scaleUpPhone());
+            StartCoroutine(waitToShowHelper());
             fpn.setIsInRoom(true);
         }
     }
@@ -31,6 +34,15 @@ public class isPhoneFollowing : MonoBehaviour
     {
         StartCoroutine(scaleDownPhone());
         fpn.setIsInRoom(false);
+    }
+
+    IEnumerator waitToShowHelper()
+    {
+        for(float t = 0; t < 3f; t += Time.deltaTime)
+        {
+            yield return null;
+        }
+        hg.startSequenceExt();
     }
 
     IEnumerator scaleUpPhone()

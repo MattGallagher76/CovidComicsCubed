@@ -45,6 +45,9 @@ public class SwipeCheck : MonoBehaviour
 
     public GameObject pageParent;
 
+    public HandGuide hg;
+    public AudioSource AudS;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -175,6 +178,11 @@ public class SwipeCheck : MonoBehaviour
                 nextPage.transform.localScale = Vector3.one * scaleConstant;
                 nextPage.transform.localPosition = new Vector3(0, 0, nextPageOffset);
                 nextPage.transform.localEulerAngles = Vector3.zero;
+
+                hg.endSequence();
+                AudS.volume = UnityEngine.Random.Range(0.9f, 1.1f);
+                AudS.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
+                AudS.Play();
             }
             else
             {
