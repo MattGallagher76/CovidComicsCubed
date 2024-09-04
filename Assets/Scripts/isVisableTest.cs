@@ -1,3 +1,4 @@
+using PathCreation.Examples;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,9 @@ public class isVisableTest : MonoBehaviour
     public bool StartAni;
 
     public float distanceThreshold;
+
+    public int UID;
+    public float timerDuration;
 
     // Start is called before the first frame update
     void Start()
@@ -83,5 +87,18 @@ public class isVisableTest : MonoBehaviour
     public void startSequence()
     {
         zoom.SetBool("zoom", true);
+        if(UID == 69)
+        {
+            StartCoroutine(joggerWait());
+        }
+    }
+
+    IEnumerator joggerWait()
+    {
+        for(float t = 0f; t < timerDuration; t += Time.deltaTime)
+        {
+            yield return null;
+        }
+        FindObjectOfType<PathMirrorer>().enterFlag = true;
     }
 }

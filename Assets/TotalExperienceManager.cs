@@ -47,6 +47,8 @@ public class TotalExperienceManager : MonoBehaviour
     public int state = 0;
 
     float timer = 0f;
+
+    bool doomHasHiden = false;
     /*
      * 0: Waiting for START
      * Doom
@@ -116,12 +118,16 @@ public class TotalExperienceManager : MonoBehaviour
                 {
                     //DoomParent.SetActive(false);
                     DoomZoneCollider.GetComponent<AudioSource>().Play();
-                    doomStencilAnimator.SetBool("SceneEnd", true);
+                    FindObjectOfType<isPhoneFollowing>().hidePhone();
+                    
                     foreach(GameObject gb in doomRings)
                     {
                         gb.SetActive(false);
                     }
-                    //DoomPageParent.SetActive(false);
+                    DoomPageParent.SetActive(false);
+
+                    doomHasHiden = true;
+
                     timer = 0f;
                     state = 3;
                     Debug.Log("Current State: " + state);
@@ -150,8 +156,6 @@ public class TotalExperienceManager : MonoBehaviour
                 {
                     state = 7;
                     Debug.Log("Current State: " + state);
-                    hg1.startSequenceExt();
-                    hg2.startSequenceExt();
                     DataVisParent.SetActive(true);
                     DataVisComicIntro.startSequence();
                     DataVisPathManager.showPrePaths();
@@ -207,15 +211,20 @@ public class TotalExperienceManager : MonoBehaviour
         {
             if(state == 2 || state == 3)
             {
-                //Zone 1 has been entered and the experience can move from doom to jogging
-                JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
-                doomStencilAnimator.SetBool("SceneEnd", true);
-                //DoomParent.SetActive(false);
-                foreach (GameObject gb in doomRings)
+                if(!doomHasHiden)
                 {
-                    gb.SetActive(false);
+                    //Zone 1 has been entered and the experience can move from doom to jogging
+                    doomStencilAnimator.SetBool("SceneEnd", true);
+                    FindObjectOfType<isPhoneFollowing>().hidePhone();
+                    //DoomParent.SetActive(false);
+                    foreach (GameObject gb in doomRings)
+                    {
+                        gb.SetActive(false);
+                    }
+                    DoomPageParent.SetActive(false);
                 }
-                DoomPageParent.SetActive(false);
+                JoggingComicIntro.GetComponent<MeshRenderer>().enabled = true;
+                DoomParent.SetActive(false);
                 state = 4;
                 Debug.Log("Current State: " + state);
                 bigCityDoom.SetActive(false);
@@ -238,12 +247,26 @@ public class TotalExperienceManager : MonoBehaviour
         {
             if(state == 8 || state == 9)
             {
+                FinalComicIntro.GetComponent<MeshRenderer>().enabled = true;
                 DataVisParent.SetActive(false);
                 state = 10;
                 Debug.Log("Current State: " + state);
                 bigCityData.SetActive(false);
                 bigCityFinal.SetActive(true);
             }
+        }
+    }
+
+    public void guidePathComicDuration(int i)
+    {
+        if(i == 1)
+        {
+            FindObjectOfType<isPhoneFollowing>().OnFakeEnter();
+        }
+        else if(i == 2)
+        {
+            hg1.startSequenceExt();
+            hg2.startSequenceExt();
         }
     }
 }

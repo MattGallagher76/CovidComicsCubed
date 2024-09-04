@@ -1,8 +1,8 @@
-Shader "Custom/StencilMaskTransparent"
+Shader "Custom/StencilMaskTransparentNoShadows"
 {
     SubShader
     {
-        // First pass: Write to the stencil buffer (no shadows)
+        // First pass: Write to the stencil buffer, but no shadow casting or receiving
         Tags { "Queue" = "Geometry-1" }
         Stencil
         {
@@ -17,7 +17,7 @@ Shader "Custom/StencilMaskTransparent"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma skipshadow       // Skip shadow casting
+            #pragma exclude_renderers d3d11 glcore gles metal   // Prevent shadows in all renderers
             #include "UnityCG.cginc"
 
             struct appdata
@@ -47,7 +47,7 @@ Shader "Custom/StencilMaskTransparent"
 
     SubShader
     {
-        // Second pass: Render the transparent plane only where the stencil buffer is set (no shadows)
+        // Second pass: Render the transparent plane only where the stencil buffer is set, with no shadows
         Tags { "Queue"="Overlay" "RenderType"="Transparent" }
         Stencil
         {
@@ -57,13 +57,15 @@ Shader "Custom/StencilMaskTransparent"
         }
         ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha
+        Lighting Off     // Disable lighting to prevent shadows
+        Cull Off         // Cull both sides to prevent shadow casting or receiving
 
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma skipshadow       // Skip shadow casting
+            #pragma exclude_renderers d3d11 glcore gles metal   // Prevent shadows in all renderers
             #include "UnityCG.cginc"
 
             struct appdata

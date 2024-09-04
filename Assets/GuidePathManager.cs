@@ -13,6 +13,8 @@ public class GuidePathManager : MonoBehaviour
     public float durBetweenPath;
     public float durationToShow;
 
+    public int k;
+
     private void Start()
     {
         hidePathsOnStart();
@@ -53,6 +55,7 @@ public class GuidePathManager : MonoBehaviour
             yield return true;
         }
         showPaths(preNextPaths);
+        FindAnyObjectByType<TotalExperienceManager>().guidePathComicDuration(k);
     }
 
     public void showPaths(List<GameObject> paths)

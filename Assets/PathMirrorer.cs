@@ -28,7 +28,7 @@ namespace PathCreation.Examples
         public float speedCoefficient;
         public float shimmyModifier;
 
-        private float maximumPlayerDistance = 5f;
+        //private float maximumPlayerDistance = 5f;
         private float currentDistance = 0f;
         public float distanceToTriggerAkwardShimmy;
 
@@ -58,6 +58,8 @@ namespace PathCreation.Examples
         public TMPro.TextMeshPro debugText;
 
         public float shimmyThreshold;
+
+        public bool enterFlag = false;
 
         void Start()
         {
@@ -92,7 +94,7 @@ namespace PathCreation.Examples
                 case stage.WAIT:
                     //Waiting for user to enter region
 
-                    if (dist < maximumPlayerDistance || Input.GetKeyDown(KeyCode.Alpha1))
+                    if (enterFlag || Input.GetKeyDown(KeyCode.Alpha1))
                     {
                         Debug.Log("ENTER");
                         currentStage = stage.ENTER;

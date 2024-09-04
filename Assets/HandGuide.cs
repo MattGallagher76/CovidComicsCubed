@@ -13,7 +13,7 @@ public class HandGuide : MonoBehaviour
 
     public float timeForText;
 
-    float timer = 0f;
+    //float timer = 0f;
 
     public int state = 0;
 
@@ -43,6 +43,7 @@ public class HandGuide : MonoBehaviour
             state = 1;
             seq = StartCoroutine(startSequence());
             hand.SetActive(true);
+            text.SetActive(true);
             animator.SetBool(animationTerm, true);
         }
     }
@@ -58,23 +59,26 @@ public class HandGuide : MonoBehaviour
 
     IEnumerator fadeTextIn()
     {
-        Color c = text.GetComponent<Renderer>().material.color;
+        Color c = text.GetComponent<TMPro.TextMeshProUGUI>().color;
+        
         for (float t = 0; t < 0.75f; t += Time.deltaTime)
         {
-            yield return true;
-            c.a = t / 0.75f;
-            text.GetComponent<Renderer>().material.color = c;
+            yield return null;
+            Color c2 = new Color(c.r, c.g, c.b, ( t / 0.75f));
+            text.GetComponent<TMPro.TextMeshProUGUI>().color = c2;
         }
     }
 
     IEnumerator fadeTextOut()
     {
-        Color c = text.GetComponent<Renderer>().material.color;
+        Color c = text.GetComponent<TMPro.TextMeshProUGUI>().color;
+
         for (float t = 0; t < 0.75f; t += Time.deltaTime)
         {
-            yield return true;
-            c.a = (0.75f - t) / 0.75f;
-            text.GetComponent<Renderer>().material.color = c;
+            yield return null;
+            Color c2 = new Color(c.r, c.g, c.b, ((0.75f - t) / 0.75f));
+            text.GetComponent<TMPro.TextMeshProUGUI>().color = c2;
         }
+        text.SetActive(false);
     }
 }

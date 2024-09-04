@@ -43,8 +43,13 @@ public class globeSpinTest : MonoBehaviour
     public HandGuide hgPoke;
     public HandGuide hgSwipe;
 
+    public TMPro.TextMeshProUGUI debugText;
+
+    Vector3 pos;
+
     void Start()
     {
+        pos = transform.position;
         //hands[0].GetComponent<Renderer>().material.co
         rb = GetComponent<Rigidbody>();
         swipePoses[0].WhenSelected += () => setHandColor(LeftHandReference, oculusHandSwipe, 0, 2);
@@ -83,6 +88,13 @@ public class globeSpinTest : MonoBehaviour
         {
             setHandColor(LeftHandReference, oculusHandSwipe, 0, 2);
         }
+
+        if(!transform.position.Equals(pos))
+        {
+            transform.position = pos;
+        }
+
+        debugText.text = "LeftHandState: " + leftHandState + "\nRightHandState: " + rightHandState + "\nactiveHandState: " + activeHandState + "\nactiveHandID: " + activeHandID;
     }
 
     void OnTriggerEnter(Collider other)
@@ -93,15 +105,22 @@ public class globeSpinTest : MonoBehaviour
             {
                 if (other.gameObject.GetInstanceID() == leftHand.GetInstanceID())
                 {
-                    activeHandState = leftHandState;
-                    lastHandPositions = leftHand.transform.position;
+                    if(leftHandState != 0)
+                    {
+                        activeHandID = other.gameObject.GetInstanceID();
+                        activeHandState = leftHandState;
+                        lastHandPositions = leftHand.transform.position;
+                    }
                 }
                 else
                 {
-                    activeHandState = rightHandState;
-                    lastHandPositions = rightHand.transform.position;
+                    if(rightHandState != 0)
+                    {
+                        activeHandID = other.gameObject.GetInstanceID();
+                        activeHandState = rightHandState;
+                        lastHandPositions = rightHand.transform.position;
+                    }
                 }
-                activeHandID = other.gameObject.GetInstanceID();
                 if(activeHandState == 1)
                 {
                     hgPoke.endSequence();
@@ -115,7 +134,7 @@ public class globeSpinTest : MonoBehaviour
     {
         if (other.CompareTag(handTag))
         {
-            if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 1)
+            if(other.gameObject.GetInstanceID() == activeHandID)
             {
                 activeHandID = 0;
                 activeHandState = -1;
@@ -140,7 +159,7 @@ public class globeSpinTest : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(handTag))
+        if (other.CompareTag(handTag) && activeHandID != 0)
         {
             if(other.gameObject.GetInstanceID() == activeHandID && activeHandState == 2)
             {

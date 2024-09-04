@@ -14,20 +14,30 @@ public class isPhoneFollowing : MonoBehaviour
     public HandGuide hg;
     // Start is called before the first frame 
 
+    public GameObject sceneParent;
+
+    public float timer = 2f;
+
     private void Start()
     {
         initialScale = phoneToHide.transform.localScale;
         phoneToHide.transform.localScale = Vector3.zero;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnFakeEnter()
     {
-        if (other.tag.Equals("MainCamera"))
+        StartCoroutine(waitToShowPhone());
+        StartCoroutine(waitToShowHelper());
+        fpn.setIsInRoom(true);
+    }
+
+    IEnumerator waitToShowPhone()
+    {
+        for(float t = 0; t < timer; t ++)
         {
-            StartCoroutine(scaleUpPhone());
-            StartCoroutine(waitToShowHelper());
-            fpn.setIsInRoom(true);
+            yield return null;
         }
+        StartCoroutine(scaleUpPhone());
     }
 
     public void hidePhone()
@@ -61,5 +71,6 @@ public class isPhoneFollowing : MonoBehaviour
             phoneToHide.transform.localScale = Vector3.Lerp(initialScale, Vector3.zero, scaleCurve.Evaluate(((float)i) / coroutineDuration));
             yield return null;
         }
+        sceneParent.SetActive(false);
     }
 }

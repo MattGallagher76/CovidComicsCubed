@@ -183,6 +183,9 @@ public class DataSetSelector : MonoBehaviour
     {
         //Destroy(localGraphLine);
         FindObjectOfType<WindowGraph>().clearGraph();
+
+        Debug.Log("old material reset");
+        FindObjectOfType<globeSpinTest>().debugText.text += "\nOld Reset - " + countryName;
         meshBuddy.GetComponent<Renderer>().material = defaultMaterial;
     }
 
